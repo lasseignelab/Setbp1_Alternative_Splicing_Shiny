@@ -1,17 +1,24 @@
 ui <- fluidPage(
+    titlePanel("Alternative Splicing in Schinzel-Giedion Syndrome"),
 
-    # Application title
-    titlePanel("Alternative Splicing in Schinzel-Giedion Syndrom"),
-
-    # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-          "Sidebar Panel"
+          selectizeInput(
+            "gene",
+            "Gene",
+            choices = NULL,
+            options = list(
+              maxOptions = 5,
+              maxItems = 1,
+              placeholder = "Loading..."
+            )
+          )
         ),
 
-        # Show a plot of the generated distribution
         mainPanel(
-           "Main Panel"
+          plotOutput("cellTypePlot"),
+          plotOutput("wildtypeGeneExpressionPlot"),
+          plotOutput("mutantGeneExpressionPlot")
         )
     )
 )
