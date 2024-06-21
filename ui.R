@@ -16,9 +16,9 @@ ui <- fluidPage(
         ),
 
         mainPanel(
-          plotOutput("cellTypePlot"),
-          plotOutput("wildtypeGeneExpressionPlot"),
-          plotOutput("mutantGeneExpressionPlot")
+          shinycssloaders::withSpinner(plotOutput("cellTypePlot")),
+          shinycssloaders::withSpinner(plotOutput("wildtypeGeneExpressionPlot")),
+          shinycssloaders::withSpinner(plotOutput("mutantGeneExpressionPlot"))
         )
     )
 )

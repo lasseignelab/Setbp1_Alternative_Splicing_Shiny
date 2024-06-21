@@ -1,4 +1,5 @@
 library(shiny)
+library(shinycssloaders)
 library(MARVEL)
 library(tidyverse)
 
