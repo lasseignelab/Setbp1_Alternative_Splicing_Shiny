@@ -5,7 +5,10 @@ library(MARVEL)
 library(tidyverse)
 
 server <- function(input, output, session) {
-  # Load data and split into wildtype and mutant.
+
+  # ****************************************************************************
+  # Load data and split into wildtype and mutant for separate plotting.
+  # ****************************************************************************
   setbp1 <- reactiveVal(readRDS("./data/setbp1_marvel_aligned_reduced_size.rds"))
 
   wildtype_setbp1 <- reactive({
@@ -30,7 +33,9 @@ server <- function(input, output, session) {
     data
   })
 
+  # ****************************************************************************
   # Setup the gene and splice junction selectors.
+  # ****************************************************************************
   gene_list <- reactive(c(c(""), setbp1()$gene.metadata$gene_short_name %>% sort()))
   splice_junction_list <- reactive({
     splice_junctions <- setbp1()$sj.metadata %>% filter(gene_short_name.start == input$gene)
@@ -73,6 +78,9 @@ server <- function(input, output, session) {
     }
   })
 
+  # ****************************************************************************
+  # Respond to the plot button.
+  # ****************************************************************************
   observeEvent(input$plot, {
     if (input$gene == "") {
       shinyjs::hide("geneExpressionPlots")
@@ -95,7 +103,9 @@ server <- function(input, output, session) {
     input$splice_junction
   })
 
-  # Create the plots.
+  # ****************************************************************************
+  # Set up the plots with caching.
+  # ****************************************************************************
   output$cellTypePlot <- renderCachedPlot(
     {
       # The following cell_group_list code is based on code authored by Emma Jones.
