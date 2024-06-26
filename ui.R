@@ -2,10 +2,14 @@ library(shiny)
 library(shinyjs)
 library(shinycssloaders)
 
-ui <- fluidPage(
-  useShinyjs(),
+welcome_about <- tabPanel(
+  title = "Welcome and About",
 
-  titlePanel("Alternative Splicing in Schinzel-Giedion Syndrome"),
+  "Welcome!!"
+)
+
+plots <- tabPanel(
+  title = "Gene Expression and Splice Junction Usage UMAPs",
 
   sidebarLayout(
     sidebarPanel(
@@ -80,4 +84,11 @@ ui <- fluidPage(
       )
     )
   )
+)
+
+ui <- navbarPage(
+  useShinyjs(),
+  title = "Alternative Splicing in Schinzel-Giedion Syndrome",
+  welcome_about,
+  plots
 )
