@@ -14,22 +14,30 @@ ui <- fluidPage(
         "Gene",
         choices = NULL,
         options = list(
-          maxOptions = 5,
+          maxOptions = 20,
           maxItems = 1,
           placeholder = "Loading..."
         )
       ),
+      helpText("Search for a gene to plot gene expression."),
       shinyjs::hidden(
-        selectizeInput(
-          "splice_junction",
-          "Splice Junction",
-          choices = NULL,
-          options = list(
-            maxItems = 1,
-            placeholder = "Loading..."
+        div(id = "spliceJunctionInput",
+          selectizeInput(
+            "splice_junction",
+            "Splice Junction",
+            choices = NULL,
+            options = list(
+              maxItems = 1,
+              placeholder = "Loading..."
+            )
+          ),
+          helpText(
+            "Select a splice junction related to the selected gene to",
+            "plot splice junction usage."
           )
         )
-      )
+      ),
+      actionButton("plot", "Show plots")
     ),
 
     mainPanel(

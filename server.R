@@ -43,7 +43,7 @@ server <- function(input, output, session) {
       "gene",
       choices = gene_list(),
       options = list(
-        placeholder = "Select a gene"
+        placeholder = "Search for a gene"
       ),
       server = TRUE
     )
@@ -51,9 +51,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$gene, {
     if (input$gene == "") {
-      shinyjs::hide("splice_junction")
-      shinyjs::hide("geneExpressionPlots")
-      shinyjs::hide("spliceJunctionPlots")
+      shinyjs::hide("spliceJunctionInput")
       updateSelectizeInput(
         session,
         "splice_junction",
@@ -71,12 +69,17 @@ server <- function(input, output, session) {
           placeholder = "Select a splice junction"
         )
       )
-      shinyjs::show("splice_junction")
-      shinyjs::show("geneExpressionPlots")
+      shinyjs::show("spliceJunctionInput")
     }
   })
 
-  observeEvent(input$splice_junction, {
+  observeEvent(input$plot, {
+    if (input$gene == "") {
+      shinyjs::hide("geneExpressionPlots")
+    } else {
+      shinyjs::show("geneExpressionPlots")
+    }
+
     if (input$splice_junction == "") {
       shinyjs::hide("spliceJunctionPlots")
     } else {
@@ -84,90 +87,113 @@ server <- function(input, output, session) {
     }
   })
 
+  gene <- eventReactive(input$plot, {
+      input$gene
+  })
+
+  splice_junction <- eventReactive(input$plot, {
+    input$splice_junction
+  })
+
   # Create the plots.
-  output$cellTypePlot <- renderPlot({
-    # The following cell_group_list code is based on code authored by Emma Jones.
-    # 230926_EJ_Setbp1_AlternativeSplicing/src/marvel/03_analyze_de_genes.Rmd
+  output$cellTypePlot <- renderCachedPlot(
+    {
+      # The following cell_group_list code is based on code authored by Emma Jones.
+      # 230926_EJ_Setbp1_AlternativeSplicing/src/marvel/03_analyze_de_genes.Rmd
 
-    # Pull cell types and matching ids
-    cell_group_list <- setbp1()$sample.metadata %>%
-      group_split(cell_type, .keep = TRUE) %>%
-      map(~ set_names(.$cell.id, .$cell_type[1]))
+      # Pull cell types and matching ids
+      cell_group_list <- setbp1()$sample.metadata %>%
+        group_split(cell_type, .keep = TRUE) %>%
+        map(~ set_names(.$cell.id, .$cell_type[1]))
 
-    # Rename
-    cell_group_list <- set_names(cell_group_list, c(
-      "Astrocytes", "Excitatory Neurons",
-      "Inhibitory Neurons", "Microglia", "OPCs",
-      "Oligodendrocytes", "Vascular Cells"
-    ))
+      # Rename
+      cell_group_list <- set_names(cell_group_list, c(
+        "Astrocytes", "Excitatory Neurons",
+        "Inhibitory Neurons", "Microglia", "OPCs",
+        "Oligodendrocytes", "Vascular Cells"
+      ))
 
-    plot <- PlotValues.PCA.CellGroup.10x(
-      MarvelObject = setbp1(),
-      cell.group.list = cell_group_list,
-      legendtitle="Cell group",
-      type = "umap"
-    )
-    plot$adhocPlot$PCA$CellGroup <- plot$adhocPlot$PCA$CellGroup + labs(title = "Cell types")
-    plot
-  })
-
-  output$wildtypeGeneExpressionPlot <- renderPlot({
-    if (input$gene != "") {
-      plot <- PlotValues.PCA.Gene.10x(
-        MarvelObject=wildtype_setbp1(),
-        gene_short_name=input$gene,
-        color.gradient=c("grey","cyan","green","yellow","red"),
-        type="umap"
+      plot <- PlotValues.PCA.CellGroup.10x(
+        MarvelObject = setbp1(),
+        cell.group.list = cell_group_list,
+        legendtitle="Cell group",
+        type = "umap"
       )
-      plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
-        labs(title = paste("Wildtype Gene Expression for", input$gene))
+      plot$adhocPlot$PCA$CellGroup <- plot$adhocPlot$PCA$CellGroup + labs(title = "Cell types")
       plot
-    }
-  })
+    },
+    cacheKeyExpr = { TRUE }
+  )
 
-  output$mutantGeneExpressionPlot <- renderPlot({
-    if (input$gene != "") {
-      plot <- PlotValues.PCA.Gene.10x(
-        MarvelObject=mutant_setbp1(),
-        gene_short_name=input$gene,
-        color.gradient=c("grey","cyan","green","yellow","red"),
-        type="umap"
-      )
-      plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
-        labs(title = paste("Mutant Gene Expression for", input$gene))
-      plot
-    }
-  })
+  output$wildtypeGeneExpressionPlot <- renderCachedPlot(
+    {
+      if (gene() != "") {
+        plot <- PlotValues.PCA.Gene.10x(
+          MarvelObject=wildtype_setbp1(),
+          gene_short_name=gene(),
+          color.gradient=c("grey","cyan","green","yellow","red"),
+          type="umap"
+        )
+        plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
+          labs(title = paste("Wildtype Gene Expression for", gene()))
+        plot
+      }
+    },
+    cacheKeyExpr = { gene() }
+  )
 
-  output$wildtypeSpliceJunctionPlot <- renderPlot({
-    if (input$splice_junction != "") {
-      plot <- PlotValues.PCA.PSI.10x(
-        MarvelObject=wildtype_setbp1(),
-        coord.intron=input$splice_junction,
-        min.gene.count=3,
-        log2.transform=FALSE,
-        color.gradient=c("grey","cyan","green","yellow","red"),
-        type="umap"
-      )
-      plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
-        labs(title = paste("Wildtype Splice Junction Usage for", input$splice_junction))
-      plot
-    }
-  })
+  output$mutantGeneExpressionPlot <- renderCachedPlot(
+    {
+      if (gene() != "") {
+        plot <- PlotValues.PCA.Gene.10x(
+          MarvelObject=mutant_setbp1(),
+          gene_short_name=gene(),
+          color.gradient=c("grey","cyan","green","yellow","red"),
+          type="umap"
+        )
+        plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
+          labs(title = paste("Mutant Gene Expression for", gene()))
+        plot
+      }
+    },
+    cacheKeyExpr = { gene() }
+  )
 
-  output$mutantSpliceJunctionPlot <- renderPlot({
-    if (input$splice_junction != "") {
-      plot <- PlotValues.PCA.PSI.10x(
-        MarvelObject=mutant_setbp1(),
-        coord.intron=input$splice_junction,
-        min.gene.count=3,
-        log2.transform=FALSE,
-        color.gradient=c("grey","cyan","green","yellow","red"),
-        type="umap"
-      )
-      plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
-        labs(title = paste("Mutant Splice Junction Usage for", input$splice_junction))
-      plot
-    }
-  })
+  output$wildtypeSpliceJunctionPlot <- renderCachedPlot(
+    {
+      if (splice_junction() != "") {
+        plot <- PlotValues.PCA.PSI.10x(
+          MarvelObject=wildtype_setbp1(),
+          coord.intron=splice_junction(),
+          min.gene.count=3,
+          log2.transform=FALSE,
+          color.gradient=c("grey","cyan","green","yellow","red"),
+          type="umap"
+        )
+        plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
+          labs(title = paste("Wildtype Splice Junction Usage for", splice_junction()))
+        plot
+      }
+    },
+    cacheKeyExpr = { splice_junction() }
+  )
+
+  output$mutantSpliceJunctionPlot <- renderCachedPlot(
+    {
+      if (splice_junction() != "") {
+        plot <- PlotValues.PCA.PSI.10x(
+          MarvelObject=mutant_setbp1(),
+          coord.intron=splice_junction(),
+          min.gene.count=3,
+          log2.transform=FALSE,
+          color.gradient=c("grey","cyan","green","yellow","red"),
+          type="umap"
+        )
+        plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
+          labs(title = paste("Mutant Splice Junction Usage for", splice_junction()))
+        plot
+      }
+    },
+    cacheKeyExpr = { splice_junction() }
+  )
 }
