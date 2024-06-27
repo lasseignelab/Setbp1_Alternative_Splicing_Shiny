@@ -36,7 +36,7 @@ server <- function(input, output, session) {
 
   # ****************************************************************************
   # Load alternative splicing gene summary pre-rendered image information from
-  # Github and setup gene selector.
+  # Github and setup gene selector with image display.
   # ****************************************************************************
   as_gene_summary_json <- reactive({
     gh("/repos/lasseignelab/230926_EJ_Setbp1_AlternativeSplicing/contents/results/as_gene_summaries/")
@@ -61,6 +61,14 @@ server <- function(input, output, session) {
       ),
       server = FALSE
     )
+  })
+
+  output$as_gene_summary_image <- renderUI({
+    as_summary_gene_selected <- input$as_summary_gene != ""
+    if (as_summary_gene_selected) {
+      url <- as_gene_summary_urls()[which(as_gene_summary_names() == input$as_summary_gene)]
+      tags$img(src = url, width = "75%", height = "75%")
+    }
   })
 
   # ****************************************************************************
@@ -236,11 +244,4 @@ server <- function(input, output, session) {
     },
     cacheKeyExpr = { splice_junction() }
   )
-
-  output$as_gene_summary_image <- renderUI({
-    if (input$as_summary_gene != "") {
-      url <- as_gene_summary_urls()[which(as_gene_summary_names() == input$as_summary_gene)]
-      tags$img(src = url, width = "75%", height = "75%")
-    }
-  })
 }
