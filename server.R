@@ -240,7 +240,7 @@ server <- function(input, output, session) {
   output$as_gene_summary_image <- renderUI({
     if (input$as_summary_gene != "") {
       url <- as_gene_summary_urls()[which(as_gene_summary_names() == input$as_summary_gene)]
-      tags$img(src = url, width = "95%", height = "95%")
+      tags$img(src = url, width = "75%", height = "75%")
     }
   })
 }
