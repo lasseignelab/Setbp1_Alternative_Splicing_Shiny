@@ -93,17 +93,8 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$gene, {
-    if (input$gene == "") {
-      shinyjs::hide("splice_junction_input")
-      updateSelectizeInput(
-        session,
-        "splice_junction",
-        choices = c(""),
-        options = list(
-          placeholder = "Loading..."
-        )
-      )
-    } else {
+    gene_selected <- input$gene != ""
+    if (gene_selected) {
       updateSelectizeInput(
         session,
         "splice_junction",
@@ -113,6 +104,16 @@ server <- function(input, output, session) {
         )
       )
       shinyjs::show("splice_junction_input")
+    } else {
+      shinyjs::hide("splice_junction_input")
+      updateSelectizeInput(
+        session,
+        "splice_junction",
+        choices = c(""),
+        options = list(
+          placeholder = "Loading..."
+        )
+      )
     }
   })
 
@@ -120,16 +121,18 @@ server <- function(input, output, session) {
   # Respond to the plot button.
   # ****************************************************************************
   observeEvent(input$plot, {
-    if (input$gene == "") {
-      shinyjs::hide("gene_expression_plots")
-    } else {
+    gene_selected <- input$gene != ""
+    if (gene_selected) {
       shinyjs::show("gene_expression_plots")
+    } else {
+      shinyjs::hide("gene_expression_plots")
     }
 
-    if (input$splice_junction == "") {
-      shinyjs::hide("splice_junction_plots")
-    } else {
+    splice_junction_selected <- input$splice_junction != ""
+    if (splice_junction_selected) {
       shinyjs::show("splice_junction_plots")
+    } else {
+      shinyjs::hide("splice_junction_plots")
     }
   })
 
@@ -175,7 +178,8 @@ server <- function(input, output, session) {
 
   output$wildtype_gene_expression_plot <- renderCachedPlot(
     {
-      if (gene() != "") {
+      gene_selected <- gene() != ""
+      if (gene_selected) {
         plot <- PlotValues.PCA.Gene.10x(
           MarvelObject=wildtype_setbp1(),
           gene_short_name=gene(),
@@ -192,7 +196,8 @@ server <- function(input, output, session) {
 
   output$mutant_gene_expression_plot <- renderCachedPlot(
     {
-      if (gene() != "") {
+      gene_selected <- gene() != ""
+      if (gene_selected) {
         plot <- PlotValues.PCA.Gene.10x(
           MarvelObject=mutant_setbp1(),
           gene_short_name=gene(),
@@ -209,7 +214,8 @@ server <- function(input, output, session) {
 
   output$wildtype_splice_junction_plot <- renderCachedPlot(
     {
-      if (splice_junction() != "") {
+      splice_junction_selected <- splice_junction() != ""
+      if (splice_junction_selected) {
         plot <- PlotValues.PCA.PSI.10x(
           MarvelObject=wildtype_setbp1(),
           coord.intron=splice_junction(),
@@ -228,7 +234,8 @@ server <- function(input, output, session) {
 
   output$mutant_splice_junction_plot <- renderCachedPlot(
     {
-      if (splice_junction() != "") {
+      splice_junction_selected <- splice_junction() != ""
+      if (splice_junction_selected) {
         plot <- PlotValues.PCA.PSI.10x(
           MarvelObject=mutant_setbp1(),
           coord.intron=splice_junction(),
