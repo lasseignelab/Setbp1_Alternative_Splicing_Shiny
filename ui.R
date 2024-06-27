@@ -86,9 +86,27 @@ plots <- tabPanel(
   )
 )
 
+as_gene_summary <- tabPanel(
+  title = "Alternative Splicing Summaries",
+
+  selectizeInput(
+    "as_summary_gene",
+    "Gene",
+    choices = NULL,
+    options = list(
+      allowEmptyOption = TRUE,
+      showEmptyOptionInDropdown = TRUE,
+      maxItems = 1,
+      placeholder = "Loading..."
+    )
+  ),
+  uiOutput("as_gene_summary_image")
+)
+
 ui <- navbarPage(
   useShinyjs(),
   title = "Alternative Splicing in Schinzel-Giedion Syndrome",
   welcome_about,
-  plots
+  plots,
+  as_gene_summary
 )

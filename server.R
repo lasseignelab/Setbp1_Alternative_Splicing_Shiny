@@ -3,11 +3,12 @@ library(shinyjs)
 library(shinycssloaders)
 library(MARVEL)
 library(tidyverse)
+library(gh)
 
 server <- function(input, output, session) {
 
   # ****************************************************************************
-  # Load data and split into wildtype and mutant for separate plotting.
+  # Load MARVEL data and split into wildtype and mutant for separate plotting.
   # ****************************************************************************
   setbp1 <- reactiveVal(readRDS("./data/setbp1_marvel_aligned_reduced_size.rds"))
 
@@ -31,6 +32,35 @@ server <- function(input, output, session) {
     data$gene.count.matrix <- data$gene.count.matrix[, data$sample.metadata$cell.id]
     data$sj.count.matrix <- data$sj.count.matrix[, data$sample.metadata$cell.id]
     data
+  })
+
+  # ****************************************************************************
+  # Load alternative splicing gene summary pre-rendered image information from
+  # Github and setup gene selector.
+  # ****************************************************************************
+  as_gene_summary_json <- reactive({
+    gh("/repos/lasseignelab/230926_EJ_Setbp1_AlternativeSplicing/contents/results/as_gene_summaries/")
+  })
+
+  as_gene_summary_names <- reactive({
+    names <- sapply(as_gene_summary_json(), function(file) file$name)
+    gsub(".png", "", names) # Remove file name suffix, e.g. Son.png -> Son
+  })
+
+  as_gene_summary_urls <- reactive({
+    sapply(as_gene_summary_json(), function(file) file$download_url)
+  })
+
+  observe({
+    updateSelectizeInput(
+      session,
+      "as_summary_gene",
+      choices = c("", as_gene_summary_names()),
+      options = list(
+        placeholder = "Select a gene"
+      ),
+      server = FALSE
+    )
   })
 
   # ****************************************************************************
@@ -206,4 +236,11 @@ server <- function(input, output, session) {
     },
     cacheKeyExpr = { splice_junction() }
   )
+
+  output$as_gene_summary_image <- renderUI({
+    if (input$as_summary_gene != "") {
+      url <- as_gene_summary_urls()[which(as_gene_summary_names() == input$as_summary_gene)]
+      tags$img(src = url, width = "95%", height = "95%")
+    }
+  })
 }
