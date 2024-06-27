@@ -86,7 +86,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$gene, {
     if (input$gene == "") {
-      shinyjs::hide("spliceJunctionInput")
+      shinyjs::hide("splice_junction_input")
       updateSelectizeInput(
         session,
         "splice_junction",
@@ -104,7 +104,7 @@ server <- function(input, output, session) {
           placeholder = "Select a splice junction"
         )
       )
-      shinyjs::show("spliceJunctionInput")
+      shinyjs::show("splice_junction_input")
     }
   })
 
@@ -113,15 +113,15 @@ server <- function(input, output, session) {
   # ****************************************************************************
   observeEvent(input$plot, {
     if (input$gene == "") {
-      shinyjs::hide("geneExpressionPlots")
+      shinyjs::hide("gene_expression_plots")
     } else {
-      shinyjs::show("geneExpressionPlots")
+      shinyjs::show("gene_expression_plots")
     }
 
     if (input$splice_junction == "") {
-      shinyjs::hide("spliceJunctionPlots")
+      shinyjs::hide("splice_junction_plots")
     } else {
-      shinyjs::show("spliceJunctionPlots")
+      shinyjs::show("splice_junction_plots")
     }
   })
 
@@ -136,7 +136,7 @@ server <- function(input, output, session) {
   # ****************************************************************************
   # Set up the plots with caching.
   # ****************************************************************************
-  output$cellTypePlot <- renderCachedPlot(
+  output$cell_type_plot <- renderCachedPlot(
     {
       # The following cell_group_list code is based on code authored by Emma Jones.
       # 230926_EJ_Setbp1_AlternativeSplicing/src/marvel/03_analyze_de_genes.Rmd
@@ -165,7 +165,7 @@ server <- function(input, output, session) {
     cacheKeyExpr = { TRUE }
   )
 
-  output$wildtypeGeneExpressionPlot <- renderCachedPlot(
+  output$wildtype_gene_expression_plot <- renderCachedPlot(
     {
       if (gene() != "") {
         plot <- PlotValues.PCA.Gene.10x(
@@ -182,7 +182,7 @@ server <- function(input, output, session) {
     cacheKeyExpr = { gene() }
   )
 
-  output$mutantGeneExpressionPlot <- renderCachedPlot(
+  output$mutant_gene_expression_plot <- renderCachedPlot(
     {
       if (gene() != "") {
         plot <- PlotValues.PCA.Gene.10x(
@@ -199,7 +199,7 @@ server <- function(input, output, session) {
     cacheKeyExpr = { gene() }
   )
 
-  output$wildtypeSpliceJunctionPlot <- renderCachedPlot(
+  output$wildtype_splice_junction_plot <- renderCachedPlot(
     {
       if (splice_junction() != "") {
         plot <- PlotValues.PCA.PSI.10x(
@@ -218,7 +218,7 @@ server <- function(input, output, session) {
     cacheKeyExpr = { splice_junction() }
   )
 
-  output$mutantSpliceJunctionPlot <- renderCachedPlot(
+  output$mutant_splice_junction_plot <- renderCachedPlot(
     {
       if (splice_junction() != "") {
         plot <- PlotValues.PCA.PSI.10x(

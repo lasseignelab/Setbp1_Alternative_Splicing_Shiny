@@ -25,7 +25,7 @@ plots <- tabPanel(
       ),
       helpText("Search for a gene to plot gene expression."),
       shinyjs::hidden(
-        div(id = "spliceJunctionInput",
+        div(id = "splice_junction_input",
           selectizeInput(
             "splice_junction",
             "Splice Junction",
@@ -45,40 +45,40 @@ plots <- tabPanel(
     ),
 
     mainPanel(
-      shinycssloaders::withSpinner(plotOutput("cellTypePlot"))
+      shinycssloaders::withSpinner(plotOutput("cell_type_plot"))
     )
   ),
   shinyjs::hidden(
-    div(id = "geneExpressionPlots",
+    div(id = "gene_expression_plots",
       fluidRow(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("wildtypeGeneExpressionPlot")
+            plotOutput("wildtype_gene_expression_plot")
           ),
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("mutantGeneExpressionPlot")
+            plotOutput("mutant_gene_expression_plot")
           )
         )
       )
     )
   ),
   shinyjs::hidden(
-    div(id = "spliceJunctionPlots",
+    div(id = "splice_junction_plots",
       fluidRow(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("wildtypeSpliceJunctionPlot")
+            plotOutput("wildtype_splice_junction_plot")
           )
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("mutantSpliceJunctionPlot")
+            plotOutput("mutant_splice_junction_plot")
           )
         )
       )
