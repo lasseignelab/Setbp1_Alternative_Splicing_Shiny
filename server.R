@@ -67,7 +67,30 @@ server <- function(input, output, session) {
     as_summary_gene_selected <- input$as_summary_gene != ""
     if (as_summary_gene_selected) {
       url <- as_gene_summary_urls()[which(as_gene_summary_names() == input$as_summary_gene)]
-      tags$img(src = url, width = "75%", height = "75%")
+      mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
+      selected_gene <- em(input$as_summary_gene)
+
+      tagList(
+        div(
+          tags$img(src = url, width = "100%", height = "auto"),
+          p(HTML(glue("
+            (A) Transcript of all annotated transcripts of {selected_gene}.
+            The color indicates transcript classification: indigo = transcripts
+            flagged for nonsense-mediated decay (NMD), dark teal = protein-coding
+            transcripts, turquoise = protein-coding transcripts, but coding
+            sequence (CDS) is not defined, and green = transcripts with retained
+            intron events. Arrows indicate the direction of transcription. (B)
+            Split violin plots showing {selected_gene} expression per cell for
+            all cell types, split by condition. (C) Heatmaps of the changes in
+            normalized mean SJ expression (top) and usage (bottom) between
+            {mouse_gene} mice and controls for all SJs of {selected_gene}. The top
+            heatmap annotation indicates cell type. A positive delta indicates
+            expression or usage was higher in {mouse_gene} mice than controls, and
+            a negative indicates expression or usage was higher in controls
+            compared to {mouse_gene} mice.
+          ")))
+        )
+      )
     }
   })
 

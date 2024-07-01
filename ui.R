@@ -6,6 +6,7 @@ library(glue)
 mouse <- paste("C57BL/6JSetbp1", tags$sup("em2Lutzy"), "/J")
 mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
 human_gene <- em("SETBP1")
+
 shiny_link <- a(href = "https://shiny.posit.co/", target = "_blank", "Shiny")
 lasseigne_link <- a(href = "https://www.lasseigne.org/", target = "_blank", "Lasseigne Lab")
 jones_paper_link <- a(href = "https://www.biorxiv.org/content/10.1101/2024.06.26.600823v1", target = "_blank", "Jones et al., 2024")
