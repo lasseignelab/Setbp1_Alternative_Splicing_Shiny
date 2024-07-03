@@ -4,6 +4,7 @@ library(shinycssloaders)
 library(MARVEL)
 library(tidyverse)
 library(gh)
+library(viridisLite)
 
 server <- function(input, output, session) {
 
@@ -170,6 +171,15 @@ server <- function(input, output, session) {
   # ****************************************************************************
   # Set up the plots with caching.
   # ****************************************************************************
+  ggplot_theme <- reactive({
+    theme(
+      plot.title = element_text(size = 16),
+      legend.title = element_text(size = 14),
+      legend.text = element_text(size = 14),
+      axis.text = element_text(size = 14)
+    )
+  })
+
   output$cell_type_plot <- renderCachedPlot(
     {
       # The following cell_group_list code is based on code authored by Emma Jones.
@@ -180,20 +190,35 @@ server <- function(input, output, session) {
         group_split(cell_type, .keep = TRUE) %>%
         map(~ set_names(.$cell.id, .$cell_type[1]))
 
-      # Rename
+      # Name the cell groups
       cell_group_list <- set_names(cell_group_list, c(
         "Astrocytes", "Excitatory Neurons",
         "Inhibitory Neurons", "Microglia", "OPCs",
         "Oligodendrocytes", "Vascular Cells"
       ))
 
+      # Set colors to match those used in the paper.
+      cell_type_colors <- c(
+        `Astrocytes` = "#6CA9E2",
+        `Excitatory Neurons` = "#98D070",
+        `Inhibitory Neurons` = "#DEE971",
+        `Microglia` = "#B898E4",
+        `Oligodendrocytes` = "#4AD8E6",
+        `OPCs` = "#0A9A8D",
+        `Vascular Cells` = "#E28C67"
+      )
+
       plot <- PlotValues.PCA.CellGroup.10x(
         MarvelObject = setbp1(),
         cell.group.list = cell_group_list,
+        point.colors = cell_type_colors,
+        point.size.legend = 7,
         legendtitle="Cell group",
         type = "umap"
       )
-      plot$adhocPlot$PCA$CellGroup <- plot$adhocPlot$PCA$CellGroup + labs(title = "Cell types")
+      plot$adhocPlot$PCA$CellGroup <- plot$adhocPlot$PCA$CellGroup +
+        labs(title = "Cell Types") +
+        ggplot_theme()
       plot
     },
     cacheKeyExpr = { TRUE }
@@ -206,11 +231,12 @@ server <- function(input, output, session) {
         plot <- PlotValues.PCA.Gene.10x(
           MarvelObject=wildtype_setbp1(),
           gene_short_name=gene(),
-          color.gradient=c("grey","cyan","green","yellow","red"),
+          color.gradient=viridis(5),
           type="umap"
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
-          labs(title = paste("Wildtype Gene Expression for", gene()))
+          labs(title = paste("Wildtype Gene Expression for", gene())) +
+          ggplot_theme()
         plot
       }
     },
@@ -224,11 +250,12 @@ server <- function(input, output, session) {
         plot <- PlotValues.PCA.Gene.10x(
           MarvelObject=mutant_setbp1(),
           gene_short_name=gene(),
-          color.gradient=c("grey","cyan","green","yellow","red"),
+          color.gradient=viridis(5),
           type="umap"
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
-          labs(title = paste("Mutant Gene Expression for", gene()))
+          labs(title = paste("Mutant Gene Expression for", gene())) +
+          ggplot_theme()
         plot
       }
     },
@@ -244,11 +271,12 @@ server <- function(input, output, session) {
           coord.intron=splice_junction(),
           min.gene.count=3,
           log2.transform=FALSE,
-          color.gradient=c("grey","cyan","green","yellow","red"),
+          color.gradient=viridis(5),
           type="umap"
         )
         plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
-          labs(title = paste("Wildtype Splice Junction Usage for", splice_junction()))
+          labs(title = paste("Wildtype Splice Junction Usage for", splice_junction())) +
+          ggplot_theme()
         plot
       }
     },
@@ -264,11 +292,12 @@ server <- function(input, output, session) {
           coord.intron=splice_junction(),
           min.gene.count=3,
           log2.transform=FALSE,
-          color.gradient=c("grey","cyan","green","yellow","red"),
+          color.gradient=viridis(5),
           type="umap"
         )
         plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
-          labs(title = paste("Mutant Splice Junction Usage for", splice_junction()))
+          labs(title = paste("Mutant Splice Junction Usage for", splice_junction())) +
+          ggplot_theme()
         plot
       }
     },
