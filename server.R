@@ -5,6 +5,7 @@ library(MARVEL)
 library(tidyverse)
 library(gh)
 library(viridisLite)
+source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_3_PlotValues_Gene.R")
 
 server <- function(input, output, session) {
 
@@ -232,6 +233,7 @@ server <- function(input, output, session) {
           MarvelObject=wildtype_setbp1(),
           gene_short_name=gene(),
           color.gradient=viridis(5),
+          log2.transform = FALSE,
           type="umap"
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
@@ -251,6 +253,7 @@ server <- function(input, output, session) {
           MarvelObject=mutant_setbp1(),
           gene_short_name=gene(),
           color.gradient=viridis(5),
+          log2.transform = FALSE,
           type="umap"
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
