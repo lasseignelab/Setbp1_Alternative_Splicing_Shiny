@@ -100,41 +100,50 @@ plots <- tabPanel(
     ),
 
     mainPanel(
-      shinycssloaders::withSpinner(plotOutput("cell_type_plot"))
+        shinycssloaders::withSpinner(plotOutput("cell_type_plot")),
+        p("
+          This UMAP displays the seven assigned cell types of all cells in our
+          dataset. Cell color indicates cell type, following the colors in the
+          figure legend.
+        ")
     )
   ),
   shinyjs::hidden(
-    div(id = "gene_expression_plots",
+    div(id = "gene_expression_plots", class = "plot-pair",
       fluidRow(
         column(
           6,
           shinycssloaders::withSpinner(
             plotOutput("wildtype_gene_expression_plot")
           ),
+          p(uiOutput("wildtype_gene_expression_legend"))
         ),
         column(
           6,
           shinycssloaders::withSpinner(
             plotOutput("mutant_gene_expression_plot")
-          )
+          ),
+          p(uiOutput("mutant_gene_expression_legend"))
         )
       )
     )
   ),
   shinyjs::hidden(
-    div(id = "splice_junction_plots",
+    div(id = "splice_junction_plots", class = "plot-pair",
       fluidRow(
         column(
           6,
           shinycssloaders::withSpinner(
             plotOutput("wildtype_splice_junction_plot")
-          )
+          ),
+          p(uiOutput("wildtype_splice_junction_legend"))
         ),
         column(
           6,
           shinycssloaders::withSpinner(
             plotOutput("mutant_splice_junction_plot")
-          )
+          ),
+          p(uiOutput("mutant_splice_junction_legend"))
         )
       )
     )

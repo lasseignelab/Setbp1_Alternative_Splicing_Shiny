@@ -237,13 +237,22 @@ server <- function(input, output, session) {
           type="umap"
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
-          labs(title = paste("Wildtype Gene Expression for", gene())) +
+          labs(title = paste("Wild-type Gene Expression for", gene())) +
           ggplot_theme()
         plot
       }
     },
     cacheKeyExpr = { gene() }
   )
+
+  output$wildtype_gene_expression_legend <- renderUI({
+    gene <- em(gene())
+    HTML(glue("
+      This UMAP displays the normalized and scaled gene expression values for
+      {gene} in wild-type mouse cerebral cortex tissue cells. A brighter color
+      indicates a higher expression level.
+    "))
+  })
 
   output$mutant_gene_expression_plot <- renderCachedPlot(
     {
@@ -257,13 +266,23 @@ server <- function(input, output, session) {
           type="umap"
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
-          labs(title = paste("Mutant Gene Expression for", gene())) +
+          labs(title = bquote(Setbp1^S858R ~ "Gene Expression for" ~ .(gene()))) +
           ggplot_theme()
         plot
       }
     },
     cacheKeyExpr = { gene() }
   )
+
+  output$mutant_gene_expression_legend <- renderUI({
+    gene <- em(gene())
+    mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
+    HTML(glue("
+      This UMAP displays the normalized and scaled gene expression values for
+      {gene} in {mouse_gene} mouse cerebral cortex tissue cells. A brighter
+      color indicates a higher expression level.
+    "))
+  })
 
   output$wildtype_splice_junction_plot <- renderCachedPlot(
     {
@@ -273,18 +292,34 @@ server <- function(input, output, session) {
           MarvelObject=wildtype_setbp1(),
           coord.intron=splice_junction(),
           min.gene.count=3,
-          log2.transform=FALSE,
-          color.gradient=viridis(5),
+          color.gradient=plasma(5),
+          log2.transform = FALSE,
           type="umap"
         )
         plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
-          labs(title = paste("Wildtype Splice Junction Usage for", splice_junction())) +
+          labs(
+            title = paste("Wild-type Splice Junction Usage for", splice_junction()),
+            color = "SJU\nper\nCell"
+          ) +
           ggplot_theme()
         plot
       }
     },
     cacheKeyExpr = { splice_junction() }
   )
+
+  output$wildtype_splice_junction_legend <- renderUI({
+    gene <- em(gene())
+    splice_junction <- splice_junction()
+    HTML(glue("
+      This UMAP displays the SJ usage (SJU) values for splice junction
+      {splice_junction} from {gene} in wild-type mouse cerebral cortex tissue
+      cells. A brighter color indicates a higher usage level. Please note that
+      our manuscript does not use SJU values per cell, and SJU is a single
+      number calculated for an entire population of cells, such as patient
+      variant cells of a specific cell type.
+    "))
+  })
 
   output$mutant_splice_junction_plot <- renderCachedPlot(
     {
@@ -294,16 +329,34 @@ server <- function(input, output, session) {
           MarvelObject=mutant_setbp1(),
           coord.intron=splice_junction(),
           min.gene.count=3,
+          color.gradient=plasma(5),
           log2.transform=FALSE,
-          color.gradient=viridis(5),
           type="umap"
         )
         plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
-          labs(title = paste("Mutant Splice Junction Usage for", splice_junction())) +
+          labs(
+            title = bquote(Setbp1^S858R ~ "Splice Junction Usage for" ~ .(splice_junction())),
+            color = "SJU\nper\nCell"
+          ) +
           ggplot_theme()
         plot
       }
     },
     cacheKeyExpr = { splice_junction() }
   )
+
+  output$mutant_splice_junction_legend <- renderUI({
+    gene <- em(gene())
+    splice_junction <- splice_junction()
+    mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
+    HTML(glue("
+      This UMAP displays the SJ usage (SJU) values for splice junction
+      {splice_junction} from {gene} in {mouse_gene} mouse cerebral cortex tissue
+      cells. A brighter color indicates a higher usage level. Please note that
+      our manuscript does not use SJU values per cell, and SJU is a single number
+      calculated for an entire population of cells, such as patient variant cells
+      of a specific cell type.
+    "))
+  })
+
 }
