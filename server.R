@@ -14,30 +14,14 @@ server <- function(input, output, session) {
   # ****************************************************************************
   # Load MARVEL data and split into wildtype and mutant for separate plotting.
   # ****************************************************************************
-  setbp1 <- reactiveVal({
-    readRDS("./data/setbp1_marvel_aligned_sans_gtf.rds")
+  setbp1_metadata <- reactive({
+    readRDS("./data/setbp1_marvel_aligned_metadata.rds")
   })
-
   wildtype_setbp1 <- reactive({
-    data <- setbp1()
-    data$sample.metadata <- data$sample.metadata %>%
-      filter(seq_folder == 'wildtype')
-    data$pca <- data$pca[data$pca$cell.id %in% data$sample.metadata$cell.id, ]
-    data$gene.norm.matrix <- data$gene.norm.matrix[, data$sample.metadata$cell.id]
-    data$gene.count.matrix <- data$gene.count.matrix[, data$sample.metadata$cell.id]
-    data$sj.count.matrix <- data$sj.count.matrix[, data$sample.metadata$cell.id]
-    data
+    readRDS("./data/setbp1_marvel_aligned_wildtype.rds")
   })
-
   mutant_setbp1 <- reactive({
-    data <- setbp1()
-    data$sample.metadata <- data$sample.metadata %>%
-      filter(seq_folder == 'mutant')
-    data$pca <- data$pca[data$pca$cell.id %in% data$sample.metadata$cell.id, ]
-    data$gene.norm.matrix <- data$gene.norm.matrix[, data$sample.metadata$cell.id]
-    data$gene.count.matrix <- data$gene.count.matrix[, data$sample.metadata$cell.id]
-    data$sj.count.matrix <- data$sj.count.matrix[, data$sample.metadata$cell.id]
-    data
+    readRDS("./data/setbp1_marvel_aligned_mutant.rds")
   })
 
   # ****************************************************************************
@@ -103,9 +87,9 @@ server <- function(input, output, session) {
   # ****************************************************************************
   # Setup the gene and splice junction selectors.
   # ****************************************************************************
-  gene_list <- reactive(c(c(""), setbp1()$gene.metadata$gene_short_name %>% sort()))
+  gene_list <- reactive(c(c(""), setbp1_metadata()$gene.metadata$gene_short_name %>% sort()))
   splice_junction_list <- reactive({
-    splice_junctions <- setbp1()$sj.metadata %>% filter(gene_short_name.start == input$gene)
+    splice_junctions <- setbp1_metadata()$sj.metadata %>% filter(gene_short_name.start == input$gene)
     c(c(""), splice_junctions$coord.intron %>% sort())
   })
 
