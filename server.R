@@ -5,6 +5,8 @@ library(MARVEL)
 library(tidyverse)
 library(gh)
 library(viridisLite)
+
+source("R/helpers.R")
 source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_3_PlotValues_Gene.R")
 
 server <- function(input, output, session) {
@@ -12,7 +14,9 @@ server <- function(input, output, session) {
   # ****************************************************************************
   # Load MARVEL data and split into wildtype and mutant for separate plotting.
   # ****************************************************************************
-  setbp1 <- reactiveVal(readRDS("./data/setbp1_marvel_aligned_reduced_size.rds"))
+  setbp1 <- reactiveVal({
+    readRDS("./data/setbp1_marvel_aligned_sans_gtf.rds")
+  })
 
   wildtype_setbp1 <- reactive({
     data <- setbp1()
@@ -172,59 +176,6 @@ server <- function(input, output, session) {
   # ****************************************************************************
   # Set up the plots with caching.
   # ****************************************************************************
-  ggplot_theme <- reactive({
-    theme(
-      plot.title = element_text(size = 16),
-      legend.title = element_text(size = 14),
-      legend.text = element_text(size = 14),
-      axis.text = element_text(size = 14)
-    )
-  })
-
-  output$cell_type_plot <- renderCachedPlot(
-    {
-      # The following cell_group_list code is based on code authored by Emma Jones.
-      # 230926_EJ_Setbp1_AlternativeSplicing/src/marvel/03_analyze_de_genes.Rmd
-
-      # Pull cell types and matching ids
-      cell_group_list <- setbp1()$sample.metadata %>%
-        group_split(cell_type, .keep = TRUE) %>%
-        map(~ set_names(.$cell.id, .$cell_type[1]))
-
-      # Name the cell groups
-      cell_group_list <- set_names(cell_group_list, c(
-        "Astrocytes", "Excitatory Neurons",
-        "Inhibitory Neurons", "Microglia", "OPCs",
-        "Oligodendrocytes", "Vascular Cells"
-      ))
-
-      # Set colors to match those used in the paper.
-      cell_type_colors <- c(
-        `Astrocytes` = "#6CA9E2",
-        `Excitatory Neurons` = "#98D070",
-        `Inhibitory Neurons` = "#DEE971",
-        `Microglia` = "#B898E4",
-        `Oligodendrocytes` = "#4AD8E6",
-        `OPCs` = "#0A9A8D",
-        `Vascular Cells` = "#E28C67"
-      )
-
-      plot <- PlotValues.PCA.CellGroup.10x(
-        MarvelObject = setbp1(),
-        cell.group.list = cell_group_list,
-        point.colors = cell_type_colors,
-        point.size.legend = 7,
-        legendtitle="Cell group",
-        type = "umap"
-      )
-      plot$adhocPlot$PCA$CellGroup <- plot$adhocPlot$PCA$CellGroup +
-        labs(title = "Cell Types") +
-        ggplot_theme()
-      plot
-    },
-    cacheKeyExpr = { TRUE }
-  )
-
   output$wildtype_gene_expression_plot <- renderCachedPlot(
     {
       gene_selected <- gene() != ""
@@ -238,7 +189,7 @@ server <- function(input, output, session) {
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
           labs(title = paste("Wild-type Gene Expression for", gene())) +
-          ggplot_theme()
+          ggplotTheme()
         plot
       }
     },
@@ -267,7 +218,7 @@ server <- function(input, output, session) {
         )
         plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
           labs(title = bquote(Setbp1^S858R ~ "Gene Expression for" ~ .(gene()))) +
-          ggplot_theme()
+          ggplotTheme()
         plot
       }
     },
@@ -301,7 +252,7 @@ server <- function(input, output, session) {
             title = paste("Wild-type Splice Junction Usage for", splice_junction()),
             color = "SJU\nper\nCell"
           ) +
-          ggplot_theme()
+          ggplotTheme()
         plot
       }
     },
@@ -338,7 +289,7 @@ server <- function(input, output, session) {
             title = bquote(Setbp1^S858R ~ "Splice Junction Usage for" ~ .(splice_junction())),
             color = "SJU\nper\nCell"
           ) +
-          ggplot_theme()
+          ggplotTheme()
         plot
       }
     },
