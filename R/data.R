@@ -1,3 +1,8 @@
+library(tidyverse)
+library(plyr)
+library(ggplot2)
+library(Matrix)
+
 metadata <- function(setbp1) {
   data <- setbp1
   data$sample.metadata <- NULL
@@ -19,7 +24,16 @@ wildtype_setbp1 <- function(setbp1) {
   data$sj.count.matrix <- data$sj.count.matrix[, data$sample.metadata$cell.id]
 
   data$sample.metadata <- NULL
-  saveRDS(data, file = "data/setbp1_marvel_aligned_wildtype.rds")
+
+  gene_data <- data
+  gene_data$sj.count.matrix <- NULL
+  gene_data$gene.count.matrix <- NULL
+  gene_data$sj.metadata <- NULL
+  saveRDS(gene_data, file = "data/setbp1_marvel_aligned_wildtype_gene.rds")
+
+  splice_junction_data <- data
+  splice_junction_data$gene.norm.matrix <- NULL
+  saveRDS(splice_junction_data, file = "data/setbp1_marvel_aligned_wildtype_sj.rds")
 }
 
 mutant_setbp1 <- function(setbp1) {
@@ -32,7 +46,16 @@ mutant_setbp1 <- function(setbp1) {
   data$sj.count.matrix <- data$sj.count.matrix[, data$sample.metadata$cell.id]
 
   data$sample.metadata <- NULL
-  saveRDS(data, file = "data/setbp1_marvel_aligned_mutant.rds")
+
+  gene_data <- data
+  gene_data$sj.count.matrix <- NULL
+  gene_data$gene.count.matrix <- NULL
+  gene_data$sj.metadata <- NULL
+  saveRDS(gene_data, file = "data/setbp1_marvel_aligned_mutant_gene.rds")
+
+  splice_junction_data <- data
+  splice_junction_data$gene.norm.matrix <- NULL
+  saveRDS(splice_junction_data, file = "data/setbp1_marvel_aligned_mutant_sj.rds")
 }
 
 prepareData <- function(filename) {
@@ -41,8 +64,8 @@ prepareData <- function(filename) {
 
   setbp1$gtf <- NULL
 
-  print("*** Saving MARVEL data sans gtf.")
-  saveRDS(setbp1, file = "data/setbp1_marvel_aligned_sans_gtf.rds")
+  print("*** Saving MARVEL data sans gtf for cell type plot rendering.")
+  saveRDS(setbp1, file = paste0(dirname(filename), "/setbp1_marvel_aligned_sans_gtf.rds"))
 
   print("*** Saving metadata file.")
   metadata(setbp1)
@@ -52,9 +75,9 @@ prepareData <- function(filename) {
   setbp1$sj.metadata$sj.type <- NULL
   setbp1$gene.metadata <- NULL
 
-  print("*** Creating wild-type file.")
+  print("*** Creating wild-type files.")
   wildtype_setbp1(setbp1)
-  print("*** Creating mutant file.")
+  print("*** Creating mutant files.")
   mutant_setbp1(setbp1)
 
   print("*** Done.")

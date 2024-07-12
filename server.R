@@ -3,10 +3,12 @@ library(shinyjs)
 library(shinycssloaders)
 library(MARVEL)
 library(tidyverse)
+library(ggtext)
 library(gh)
 library(viridisLite)
 
 source("R/helpers.R")
+source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_2_PlotValues_PSI.R")
 source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_3_PlotValues_Gene.R")
 
 server <- function(input, output, session) {
@@ -16,12 +18,6 @@ server <- function(input, output, session) {
   # ****************************************************************************
   setbp1_metadata <- reactive({
     readRDS("./data/setbp1_marvel_aligned_metadata.rds")
-  })
-  wildtype_setbp1 <- reactive({
-    readRDS("./data/setbp1_marvel_aligned_wildtype.rds")
-  })
-  mutant_setbp1 <- reactive({
-    readRDS("./data/setbp1_marvel_aligned_mutant.rds")
   })
 
   # ****************************************************************************
@@ -159,25 +155,58 @@ server <- function(input, output, session) {
 
   # ****************************************************************************
   # Set up the plots with caching.
+  #
+  # *** WARNING*** The following plots are implemented in a way that reduces
+  #                memory usage in order to conform to the shinyapps.io limit
+  #                of 8Gb.  The limit is strictly enforced and memory would
+  #                spike above the limit before garbage collection would release
+  #                memory which resulted in the app process being killed.
+  #
+  # The following steps were taken to reduce memory usage. Please do not use
+  # these unless it is absolutely necessary:
+  #
+  # 1) The data file is broken into a separate file for each plot with only
+  #    the data needed for that plot. The file is read from disk as each plot
+  #    is rendered.  This saves memory at the cost of performance.
+  # 2) Garbage collection was encouraged before and after each plot by calling
+  #    gc() to recover memory more quickly.
+  # 3) The data and plot variables are explicitly set to NULL after they have
+  #    been used so that garbage collection will release them more readily.
+  # 4) renderImage was used instead of renderPlot so that no references to the
+  #    data or plot objects would be held by Shiny beyond the output rendering.
+  #    As a result, it is not possible to cache the plots which sacrifices
+  #    performance to conserve memory.
   # ****************************************************************************
-  output$wildtype_gene_expression_plot <- renderCachedPlot(
+
+  output$wildtype_gene_expression_plot <- renderImage(
     {
       gene_selected <- gene() != ""
       if (gene_selected) {
+        gc()
+        wildtype_setbp1 <- readRDS("./data/setbp1_marvel_aligned_wildtype_gene.rds")
         plot <- PlotValues.PCA.Gene.10x(
-          MarvelObject=wildtype_setbp1(),
+          MarvelObject=wildtype_setbp1,
           gene_short_name=gene(),
           color.gradient=viridis(5),
           log2.transform = FALSE,
           type="umap"
         )
-        plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
+        wildtype_setbp1 <- NULL
+
+        plot <- plot +
           labs(title = paste("Wild-type Gene Expression for", gene())) +
           ggplotTheme()
-        plot
+
+        outfile <- tempfile(fileext = ".png")
+        png(outfile, height = 400, width = 500)
+        print(plot)
+        dev.off()
+        plot <- NULL
+        gc()
+
+        list(src = outfile)
       }
-    },
-    cacheKeyExpr = { gene() }
+    }, deleteFile = TRUE
   )
 
   output$wildtype_gene_expression_legend <- renderUI({
@@ -189,24 +218,37 @@ server <- function(input, output, session) {
     "))
   })
 
-  output$mutant_gene_expression_plot <- renderCachedPlot(
+  output$mutant_gene_expression_plot <- renderImage(
     {
       gene_selected <- gene() != ""
       if (gene_selected) {
+        gc()
+        mutant_setbp1 <- readRDS("./data/setbp1_marvel_aligned_mutant_gene.rds")
         plot <- PlotValues.PCA.Gene.10x(
-          MarvelObject=mutant_setbp1(),
+          MarvelObject=mutant_setbp1,
           gene_short_name=gene(),
           color.gradient=viridis(5),
           log2.transform = FALSE,
           type="umap"
         )
-        plot$adhocPlot$PCA$Gene <- plot$adhocPlot$PCA$Gene +
-          labs(title = bquote(Setbp1^S858R ~ "Gene Expression for" ~ .(gene()))) +
+        mutant_setbp1 <- NULL
+
+        plot <- plot +
+          labs(
+            title = paste0("<i>Setbp1</i><sup>S858R</sup> Gene Expression for ", gene())
+          ) +
           ggplotTheme()
-        plot
+
+        outfile <- tempfile(fileext = ".png")
+        png(outfile, height = 400, width = 500)
+        print(plot)
+        dev.off()
+        plot <- NULL
+        gc()
+
+        list(src = outfile)
       }
-    },
-    cacheKeyExpr = { gene() }
+    }, deleteFile = TRUE
   )
 
   output$mutant_gene_expression_legend <- renderUI({
@@ -219,28 +261,39 @@ server <- function(input, output, session) {
     "))
   })
 
-  output$wildtype_splice_junction_plot <- renderCachedPlot(
+  output$wildtype_splice_junction_plot <- renderImage(
     {
       splice_junction_selected <- splice_junction() != ""
       if (splice_junction_selected) {
+        gc()
+        wildtype_setbp1 <- readRDS("./data/setbp1_marvel_aligned_wildtype_sj.rds")
         plot <- PlotValues.PCA.PSI.10x(
-          MarvelObject=wildtype_setbp1(),
+          MarvelObject=wildtype_setbp1,
           coord.intron=splice_junction(),
           min.gene.count=3,
           color.gradient=plasma(5),
           log2.transform = FALSE,
           type="umap"
         )
-        plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
+        wildtype_setbp1 <- NULL
+
+        plot <- plot +
           labs(
             title = paste("Wild-type Splice Junction Usage for", splice_junction()),
             color = "SJU\nper\nCell"
           ) +
           ggplotTheme()
-        plot
+
+        outfile <- tempfile(fileext = ".png")
+        png(outfile, height = 400, width = 500)
+        print(plot)
+        dev.off()
+        plot <- NULL
+        gc()
+
+        list(src = outfile)
       }
-    },
-    cacheKeyExpr = { splice_junction() }
+    }, deleteFile = TRUE
   )
 
   output$wildtype_splice_junction_legend <- renderUI({
@@ -256,28 +309,39 @@ server <- function(input, output, session) {
     "))
   })
 
-  output$mutant_splice_junction_plot <- renderCachedPlot(
+  output$mutant_splice_junction_plot <- renderImage(
     {
       splice_junction_selected <- splice_junction() != ""
       if (splice_junction_selected) {
+        gc()
+        mutant_setbp1 <- readRDS("./data/setbp1_marvel_aligned_mutant_sj.rds")
         plot <- PlotValues.PCA.PSI.10x(
-          MarvelObject=mutant_setbp1(),
+          MarvelObject=mutant_setbp1,
           coord.intron=splice_junction(),
           min.gene.count=3,
           color.gradient=plasma(5),
           log2.transform=FALSE,
           type="umap"
         )
-        plot$adhocPlot$PCA$PSI <- plot$adhocPlot$PCA$PSI +
+        mutant_setbp1 <- NULL
+
+        plot <- plot +
           labs(
-            title = bquote(Setbp1^S858R ~ "Splice Junction Usage for" ~ .(splice_junction())),
+            title = paste0("<i>Setbp1</i><sup>S858R</sup> Splice Junction Usage for ", splice_junction()),
             color = "SJU\nper\nCell"
           ) +
           ggplotTheme()
-        plot
+
+        outfile <- tempfile(fileext = ".png")
+        png(outfile, height = 400, width = 500)
+        print(plot)
+        dev.off()
+        plot <- NULL
+        gc()
+
+        list(src = outfile)
       }
-    },
-    cacheKeyExpr = { splice_junction() }
+    }, deleteFile = TRUE
   )
 
   output$mutant_splice_junction_legend <- renderUI({
