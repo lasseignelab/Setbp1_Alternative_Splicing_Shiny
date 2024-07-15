@@ -93,10 +93,25 @@ plots <- tabPanel(
           helpText(
             "Select a splice junction related to the selected gene to",
             "plot splice junction usage."
+          ),
+          radioButtons(
+            "plot_type",
+            "Choose data to plot",
+            choiceNames = list(
+              "Gene Expression",
+              "Splice Junction Usage"
+            ),
+            choiceValues = list("gene_expression", "splice_junction_usage")
           )
         )
       ),
-      actionButton("plot", "Show plots")
+      conditionalPanel(condition = "!$('html').hasClass('shiny-busy')",
+        actionButton("plot", "Show plots")
+      ),
+      conditionalPanel(condition = "$('html').hasClass('shiny-busy')",
+        actionButton("", "Show plots", disabled = TRUE)
+      ),
+      htmlOutput("form_validation", class = "validation-messages")
     ),
 
     mainPanel(
@@ -116,16 +131,16 @@ plots <- tabPanel(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("wildtype_gene_expression_plot")
+            plotOutput("wildtype_gene_expression_plot", width = "100%", height = "auto")
           ),
-          p(uiOutput("wildtype_gene_expression_legend"))
+          uiOutput("wildtype_gene_expression_legend")
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("mutant_gene_expression_plot")
+            plotOutput("mutant_gene_expression_plot", width = "100%", height = "auto")
           ),
-          p(uiOutput("mutant_gene_expression_legend"))
+          uiOutput("mutant_gene_expression_legend")
         )
       )
     )
@@ -136,16 +151,16 @@ plots <- tabPanel(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("wildtype_splice_junction_plot")
+            plotOutput("wildtype_splice_junction_plot", width = "100%", height = "auto")
           ),
-          p(uiOutput("wildtype_splice_junction_legend"))
+          uiOutput("wildtype_splice_junction_legend")
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("mutant_splice_junction_plot")
+            plotOutput("mutant_splice_junction_plot", width = "100%", height = "auto")
           ),
-          p(uiOutput("mutant_splice_junction_legend"))
+          uiOutput("mutant_splice_junction_legend")
         )
       )
     )

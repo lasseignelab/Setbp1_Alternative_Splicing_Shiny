@@ -131,27 +131,63 @@ server <- function(input, output, session) {
   # ****************************************************************************
   observeEvent(input$plot, {
     gene_selected <- input$gene != ""
-    if (gene_selected) {
+    if (gene_selected & input$plot_type == "gene_expression") {
       shinyjs::show("gene_expression_plots")
     } else {
       shinyjs::hide("gene_expression_plots")
     }
 
     splice_junction_selected <- input$splice_junction != ""
-    if (splice_junction_selected) {
+    if (splice_junction_selected & input$plot_type == "splice_junction_usage") {
       shinyjs::show("splice_junction_plots")
     } else {
       shinyjs::hide("splice_junction_plots")
     }
+
+    output$form_validation <- renderUI({
+      if (!splice_junction_selected & input$plot_type == "splice_junction_usage") {
+        div("Splice junction is required.", class = "alert alert-danger")
+      }
+    })
   })
 
-  gene <- eventReactive(input$plot, {
+  gene <- eventReactive(
+    {
+      # Initialize the session variable to prevent NULL error
+      session$userData$last_gene_plot_click <- first(c(session$userData$last_gene_plot_click, ""))
+
+      new_plot_click <- input$plot != session$userData$last_gene_plot_click
+      show_gene_expression <- input$plot_type == "gene_expression"
+      if (new_plot_click & show_gene_expression) {
+        session$userData$last_gene_plot_click <- input$plot
+        input$plot
+      } else {
+        NULL
+      }
+    },
+    {
       input$gene
-  })
+    }
+  )
 
-  splice_junction <- eventReactive(input$plot, {
-    input$splice_junction
-  })
+  splice_junction <- eventReactive(
+    {
+      # Initialize the session variable to prevent NULL error
+      session$userData$last_sj_plot_click <- first(c(session$userData$last_sj_plot_click, ""))
+
+      new_plot_click <- input$plot != session$userData$last_sj_plot_click
+      show_splice_junction_usage <- input$plot_type == "splice_junction_usage"
+      if (new_plot_click & show_splice_junction_usage) {
+        session$userData$last_sj_plot_click <- input$plot
+        input$plot
+      } else {
+        NULL
+      }
+    },
+    {
+      input$splice_junction
+    }
+  )
 
   # ****************************************************************************
   # Set up the plots with caching.
@@ -204,7 +240,7 @@ server <- function(input, output, session) {
         plot <- NULL
         gc()
 
-        list(src = outfile)
+        list(src = outfile, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
@@ -246,7 +282,7 @@ server <- function(input, output, session) {
         plot <- NULL
         gc()
 
-        list(src = outfile)
+        list(src = outfile, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
@@ -291,13 +327,13 @@ server <- function(input, output, session) {
         plot <- NULL
         gc()
 
-        list(src = outfile)
+        list(src = outfile, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
 
   output$wildtype_splice_junction_legend <- renderUI({
-    gene <- em(gene())
+    gene <- em(input$gene)
     splice_junction <- splice_junction()
     HTML(glue("
       This UMAP displays the SJ usage (SJU) values for splice junction
@@ -339,13 +375,13 @@ server <- function(input, output, session) {
         plot <- NULL
         gc()
 
-        list(src = outfile)
+        list(src = outfile, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
 
   output$mutant_splice_junction_legend <- renderUI({
-    gene <- em(gene())
+    gene <- em(input$gene)
     splice_junction <- splice_junction()
     mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
     HTML(glue("

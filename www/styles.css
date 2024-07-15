@@ -4,6 +4,10 @@
   margin-top: 50px;
 }
 
+.validation-messages {
+  margin-top: 20px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
