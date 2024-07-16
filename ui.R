@@ -297,7 +297,6 @@ faq <- tabPanel(
   )
 )
 
-
 ui <- navbarPage(
   includeCSS("www/styles.css"),
   useShinyjs(),
@@ -311,8 +310,9 @@ ui <- navbarPage(
   tags$footer(class = "footer",
     div(class = "container",
       p(class = "text-center",
-        HTML(glue("Figures created with BioRender.com | Copyright 2024 by the {lasseigne_link}"))
-      )
+        HTML(glue("Figures created with BioRender.com | Copyright 2024 by the {lasseigne_link}")),
+        a(href = "https://www.lasseigne.org/", target = "_blank", img(src = "logo_only.png", height = "50px"))
+      ),
     )
   )
 )
