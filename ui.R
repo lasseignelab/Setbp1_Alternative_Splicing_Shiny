@@ -8,6 +8,7 @@ mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
 human_gene <- em("SETBP1")
 
 shiny_link <- a(href = "https://shiny.posit.co/", target = "_blank", "Shiny")
+marvel_link <- a(href = "https://github.com/wenweixiong/MARVEL", target = "_blank", "MARVEL")
 lasseigne_link <- a(href = "https://www.lasseigne.org/", target = "_blank", "Lasseigne Lab")
 jones_paper_link <- a(href = "https://www.biorxiv.org/content/10.1101/2024.06.26.600823v1", target = "_blank", "Jones et al., 2024")
 whitlock_paper_link <- a(href = "https://doi.org/10.1111/jcmm.18001", target = "_blank", "Whitlock et al., 2023")
@@ -170,6 +171,15 @@ plots <- tabPanel(
 as_gene_summary <- tabPanel(
   title = "Alternative Splicing Summaries",
 
+  p(HTML(glue("
+    To determine significant changes in SJ usage (SJU), we performed a
+    permutation analysis using the {marvel_link} R package for each cell type
+    between {mouse_gene} and controls. We detected 34 genes with significant
+    changes in SJU (permutation test, p < 0.05 and delta > 1). To explore the
+    transcript structures, splice junction expression, and splice junction usage
+    of these 34 significant SJU genes, please select a gene here! For more
+    information, please refer to our manuscript ({jones_paper_link}).
+  "))),
   selectizeInput(
     "as_summary_gene",
     "Gene",
