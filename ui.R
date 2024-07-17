@@ -80,6 +80,8 @@ plots <- tabPanel(
         )
       ),
       helpText("Search for a gene to plot gene expression."),
+      htmlOutput("genome_browsers"),
+
       shinyjs::hidden(
         div(id = "splice_junction_input",
           selectizeInput(
@@ -95,6 +97,7 @@ plots <- tabPanel(
             "Select a splice junction related to the selected gene to",
             "plot splice junction usage."
           ),
+
           radioButtons(
             "plot_type",
             "Choose data to plot",
