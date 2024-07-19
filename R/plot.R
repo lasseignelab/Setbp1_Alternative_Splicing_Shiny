@@ -1,5 +1,6 @@
 library(tidyverse)
 library(MARVEL)
+library(here)
 
 source("R/helpers.R")
 
@@ -31,7 +32,13 @@ prerenderCellTypePlot <- function(data) {
     `Vascular Cells` = "#E28C67"
   )
 
-  png(paste0(here(), "/www/cell_types.png"), height = 400, width = 600)
+  png(
+    paste0(here(), "/www/cell_types.png"),
+    height = 4,
+    width = 6,
+    units = "in",
+    res = 300
+  )
   plot <- PlotValues.PCA.CellGroup.10x(
     MarvelObject = data,
     cell.group.list = cell_group_list,
