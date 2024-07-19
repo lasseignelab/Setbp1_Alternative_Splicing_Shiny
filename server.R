@@ -8,7 +8,6 @@ library(gh)
 library(viridisLite)
 library(fontawesome)
 
-source("R/helpers.R")
 source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_2_PlotValues_PSI.R")
 source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_3_PlotValues_Gene.R")
 
@@ -267,71 +266,54 @@ server <- function(input, output, session) {
     {
       gene_selected <- gene() != ""
       if (gene_selected) {
-        gc()
-        wildtype_setbp1 <- readRDS("./data/setbp1_marvel_aligned_wildtype_gene.rds")
-        plot <- PlotValues.PCA.Gene.10x(
-          MarvelObject=wildtype_setbp1,
-          gene_short_name=gene(),
-          color.gradient=viridis(5),
-          log2.transform = FALSE,
-          type="umap"
+        image_file <- gene_expression_plot_image(
+          "./data/setbp1_marvel_aligned_wildtype_gene.rds",
+          "Wild-type",
+          gene()
         )
-        wildtype_setbp1 <- NULL
-
-        plot <- plot +
-          labs(title = paste("Wild-type Gene Expression for", gene())) +
-          ggplotTheme()
-
-        outfile <- tempfile(fileext = ".png")
-        png(outfile, height = 400, width = 500)
-        print(plot)
-        dev.off()
-        plot <- NULL
-        gc()
-
-        list(src = outfile, width = "100%", height = "auto")
+        list(src = image_file, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
 
   output$wildtype_gene_expression_legend <- renderUI({
     gene <- em(gene())
-    HTML(glue("
-      This UMAP displays the normalized and scaled gene expression values for
-      {gene} in wild-type mouse cerebral cortex tissue cells. A brighter color
-      indicates a higher expression level.
-    "))
+    tagList(
+      HTML(glue("
+        This UMAP displays the normalized and scaled gene expression values for
+        {gene} in wild-type mouse cerebral cortex tissue cells. A brighter color
+        indicates a higher expression level.
+      ")),
+      downloadLink(
+        "wildtype_gene_expression_download",
+        label = HTML(paste0("Download ", fa("download")))
+      )
+    )
   })
+
+  output$wildtype_gene_expression_download <- downloadHandler(
+    filename = function() {"plot.png"},
+    content = function(file) {
+      image_file <- gene_expression_plot_image(
+        "./data/setbp1_marvel_aligned_wildtype_gene.rds",
+        "Wild-type",
+        gene()
+      )
+      file.copy(image_file, file)
+      file.remove(image_file)
+    }
+  )
 
   output$mutant_gene_expression_plot <- renderImage(
     {
       gene_selected <- gene() != ""
       if (gene_selected) {
-        gc()
-        mutant_setbp1 <- readRDS("./data/setbp1_marvel_aligned_mutant_gene.rds")
-        plot <- PlotValues.PCA.Gene.10x(
-          MarvelObject=mutant_setbp1,
-          gene_short_name=gene(),
-          color.gradient=viridis(5),
-          log2.transform = FALSE,
-          type="umap"
+        image_file <- gene_expression_plot_image(
+          "./data/setbp1_marvel_aligned_mutant_gene.rds",
+          "<i>Setbp1</i><sup>S858R</sup>",
+          gene()
         )
-        mutant_setbp1 <- NULL
-
-        plot <- plot +
-          labs(
-            title = paste0("<i>Setbp1</i><sup>S858R</sup> Gene Expression for ", gene())
-          ) +
-          ggplotTheme()
-
-        outfile <- tempfile(fileext = ".png")
-        png(outfile, height = 400, width = 500)
-        print(plot)
-        dev.off()
-        plot <- NULL
-        gc()
-
-        list(src = outfile, width = "100%", height = "auto")
+        list(src = image_file, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
@@ -339,44 +321,42 @@ server <- function(input, output, session) {
   output$mutant_gene_expression_legend <- renderUI({
     gene <- em(gene())
     mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
-    HTML(glue("
+    tagList(
+      HTML(glue("
       This UMAP displays the normalized and scaled gene expression values for
       {gene} in {mouse_gene} mouse cerebral cortex tissue cells. A brighter
       color indicates a higher expression level.
-    "))
+      ")),
+      downloadLink(
+        "mutant_gene_expression_download",
+        label = HTML(paste0("Download ", fa("download")))
+      )
+    )
   })
+
+  output$mutant_gene_expression_download <- downloadHandler(
+    filename = function() {"plot.png"},
+    content = function(file) {
+      image_file <- gene_expression_plot_image(
+        "./data/setbp1_marvel_aligned_mutant_gene.rds",
+        "<i>Setbp1</i><sup>S858R</sup>",
+        gene()
+      )
+      file.copy(image_file, file)
+      file.remove(image_file)
+    }
+  )
 
   output$wildtype_splice_junction_plot <- renderImage(
     {
       splice_junction_selected <- splice_junction() != ""
       if (splice_junction_selected) {
-        gc()
-        wildtype_setbp1 <- readRDS("./data/setbp1_marvel_aligned_wildtype_sj.rds")
-        plot <- PlotValues.PCA.PSI.10x(
-          MarvelObject=wildtype_setbp1,
-          coord.intron=splice_junction(),
-          min.gene.count=3,
-          color.gradient=plasma(5),
-          log2.transform = FALSE,
-          type="umap"
+        image_file <- splice_junction_plot_image(
+          "./data/setbp1_marvel_aligned_wildtype_sj.rds",
+          "Wild-type",
+          splice_junction()
         )
-        wildtype_setbp1 <- NULL
-
-        plot <- plot +
-          labs(
-            title = paste("Wild-type Splice Junction Usage for", splice_junction()),
-            color = "SJU\nper\nCell"
-          ) +
-          ggplotTheme()
-
-        outfile <- tempfile(fileext = ".png")
-        png(outfile, height = 400, width = 500)
-        print(plot)
-        dev.off()
-        plot <- NULL
-        gc()
-
-        list(src = outfile, width = "100%", height = "auto")
+        list(src = image_file, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
@@ -384,47 +364,45 @@ server <- function(input, output, session) {
   output$wildtype_splice_junction_legend <- renderUI({
     gene <- em(input$gene)
     splice_junction <- splice_junction()
-    HTML(glue("
-      This UMAP displays the SJ usage (SJU) values for splice junction
-      {splice_junction} from {gene} in wild-type mouse cerebral cortex tissue
-      cells. A brighter color indicates a higher usage level. Please note that
-      our manuscript does not use SJU values per cell, and SJU is a single
-      number calculated for an entire population of cells, such as patient
-      variant cells of a specific cell type.
-    "))
+    tagList(
+      HTML(glue("
+        This UMAP displays the SJ usage (SJU) values for splice junction
+        {splice_junction} from {gene} in wild-type mouse cerebral cortex tissue
+        cells. A brighter color indicates a higher usage level. Please note that
+        our manuscript does not use SJU values per cell, and SJU is a single
+        number calculated for an entire population of cells, such as patient
+        variant cells of a specific cell type.
+      ")),
+      downloadLink(
+        "wildtype_splice_junction_download",
+        label = HTML(paste0("Download ", fa("download")))
+      )
+    )
   })
+
+  output$wildtype_splice_junction_download <- downloadHandler(
+    filename = function() {"plot.png"},
+    content = function(file) {
+      image_file <- splice_junction_plot_image(
+        "./data/setbp1_marvel_aligned_wildtype_sj.rds",
+        "Wild-type",
+        splice_junction()
+      )
+      file.copy(image_file, file)
+      file.remove(image_file)
+    }
+  )
 
   output$mutant_splice_junction_plot <- renderImage(
     {
       splice_junction_selected <- splice_junction() != ""
       if (splice_junction_selected) {
-        gc()
-        mutant_setbp1 <- readRDS("./data/setbp1_marvel_aligned_mutant_sj.rds")
-        plot <- PlotValues.PCA.PSI.10x(
-          MarvelObject=mutant_setbp1,
-          coord.intron=splice_junction(),
-          min.gene.count=3,
-          color.gradient=plasma(5),
-          log2.transform=FALSE,
-          type="umap"
+        image_file <- splice_junction_plot_image(
+          "./data/setbp1_marvel_aligned_mutant_sj.rds",
+          "<i>Setbp1</i><sup>S858R</sup>",
+          splice_junction()
         )
-        mutant_setbp1 <- NULL
-
-        plot <- plot +
-          labs(
-            title = paste0("<i>Setbp1</i><sup>S858R</sup> Splice Junction Usage for ", splice_junction()),
-            color = "SJU\nper\nCell"
-          ) +
-          ggplotTheme()
-
-        outfile <- tempfile(fileext = ".png")
-        png(outfile, height = 400, width = 500)
-        print(plot)
-        dev.off()
-        plot <- NULL
-        gc()
-
-        list(src = outfile, width = "100%", height = "auto")
+        list(src = image_file, width = "100%", height = "auto")
       }
     }, deleteFile = TRUE
   )
@@ -433,14 +411,33 @@ server <- function(input, output, session) {
     gene <- em(input$gene)
     splice_junction <- splice_junction()
     mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
-    HTML(glue("
-      This UMAP displays the SJ usage (SJU) values for splice junction
-      {splice_junction} from {gene} in {mouse_gene} mouse cerebral cortex tissue
-      cells. A brighter color indicates a higher usage level. Please note that
-      our manuscript does not use SJU values per cell, and SJU is a single number
-      calculated for an entire population of cells, such as patient variant cells
-      of a specific cell type.
-    "))
+    tagList(
+      HTML(glue("
+        This UMAP displays the SJ usage (SJU) values for splice junction
+        {splice_junction} from {gene} in {mouse_gene} mouse cerebral cortex tissue
+        cells. A brighter color indicates a higher usage level. Please note that
+        our manuscript does not use SJU values per cell, and SJU is a single number
+        calculated for an entire population of cells, such as patient variant cells
+        of a specific cell type.
+      ")),
+      downloadLink(
+        "mutant_splice_junction_download",
+        label = HTML(paste0("Download ", fa("download")))
+      )
+    )
   })
+
+  output$mutant_splice_junction_download <- downloadHandler(
+    filename = function() {"plot.png"},
+    content = function(file) {
+      image_file <- splice_junction_plot_image(
+        "./data/setbp1_marvel_aligned_mutant_sj.rds",
+        "<i>Setbp1</i><sup>S858R</sup>",
+        splice_junction()
+      )
+      file.copy(image_file, file)
+      file.remove(image_file)
+    }
+  )
 
 }
