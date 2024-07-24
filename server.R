@@ -8,6 +8,8 @@ library(gh)
 library(viridisLite)
 library(fontawesome)
 
+# The following MARVEL files had to be Monkey Patched in order to fix a bug
+# and to use less memory.
 source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_2_PlotValues_PSI.R")
 source("MARVEL/Script_DROPLET_07_ADHOC_PLOT_PCA_3_PlotValues_Gene.R")
 
@@ -194,45 +196,21 @@ server <- function(input, output, session) {
   })
 
   gene <- eventReactive(
-    {
-      # Initialize the session variable to prevent NULL error
-      session$userData$last_gene_plot_click <- first(c(session$userData$last_gene_plot_click, ""))
-
-      new_plot_click <- input$plot != session$userData$last_gene_plot_click
-      show_gene_expression <- input$plot_type == "gene_expression"
-      if (new_plot_click & show_gene_expression) {
-        session$userData$last_gene_plot_click <- input$plot
-        input$plot
-      } else {
-        NULL
-      }
-    },
+    initiate_gene_expression_plot(session, input$plot, input$plot_type),
     {
       input$gene
     }
   )
 
   splice_junction <- eventReactive(
-    {
-      # Initialize the session variable to prevent NULL error
-      session$userData$last_sj_plot_click <- first(c(session$userData$last_sj_plot_click, ""))
-
-      new_plot_click <- input$plot != session$userData$last_sj_plot_click
-      show_splice_junction_usage <- input$plot_type == "splice_junction_usage"
-      if (new_plot_click & show_splice_junction_usage) {
-        session$userData$last_sj_plot_click <- input$plot
-        input$plot
-      } else {
-        NULL
-      }
-    },
+    initiate_splice_junction_plot(session, input$plot, input$plot_type),
     {
       input$splice_junction
     }
   )
 
   # ****************************************************************************
-  # Set up the plots with caching.
+  # Set up the gene expression and splice junction usage plots.
   #
   # *** WARNING*** The following plots are implemented in a way that reduces
   #                memory usage in order to conform to the shinyapps.io limit
@@ -241,7 +219,7 @@ server <- function(input, output, session) {
   #                memory which resulted in the app process being killed.
   #
   # The following steps were taken to reduce memory usage. Please do not use
-  # these unless it is absolutely necessary:
+  # these in other Shiny apps unless it is absolutely necessary:
   #
   # 1) The data file is broken into a separate file for each plot with only
   #    the data needed for that plot. The file is read from disk as each plot
@@ -360,7 +338,7 @@ server <- function(input, output, session) {
     splice_junction <- splice_junction()
     tagList(
       HTML(glue("
-        This UMAP displays the SJ usage (SJU) values for splice junction
+        This UMAP displays the splice junction usage (SJU) values for splice junction
         {splice_junction} from {gene} in wild-type mouse cerebral cortex tissue
         cells. A brighter color indicates a higher usage level. Please note that
         our manuscript does not use SJU values per cell, and SJU is a single
@@ -407,7 +385,7 @@ server <- function(input, output, session) {
     mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
     tagList(
       HTML(glue("
-        This UMAP displays the SJ usage (SJU) values for splice junction
+        This UMAP displays the splice junction usage (SJU) values for splice junction
         {splice_junction} from {gene} in {mouse_gene} mouse cerebral cortex tissue
         cells. A brighter color indicates a higher usage level. Please note that
         our manuscript does not use SJU values per cell, and SJU is a single number
