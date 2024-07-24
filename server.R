@@ -152,12 +152,18 @@ server <- function(input, output, session) {
     } else {
       shinyjs::hide("splice_junction_plots")
     }
+  })
 
-    output$form_validation <- renderUI({
-      if (!splice_junction_selected & input$plot_type == "splice_junction_usage") {
-        div("Splice junction is required.", class = "alert alert-danger")
-      }
-    })
+  output$form_validation <- renderUI({
+    initialize_last_plot_click(session)
+
+    button_clicked <- session$userData$last_plot_click != input$plot
+    splice_junction_plot <- input$plot_type == "splice_junction_usage"
+    splice_junction_selected <- input$splice_junction != ""
+    if (button_clicked & splice_junction_plot & !splice_junction_selected) {
+      session$userData$last_plot_click <- input$plot
+      div("Splice junction is required.", class = "alert alert-danger")
+    }
   })
 
   gene <- eventReactive(
