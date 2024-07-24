@@ -3,10 +3,12 @@ library(shinyjs)
 library(shinycssloaders)
 library(glue)
 
+# Mouse and gene names with proper formatting.
 mouse <- paste("C57BL/6JSetbp1", tags$sup("em2Lutzy"), "/J")
 mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
 human_gene <- em("SETBP1")
 
+# External links used throughout the app for references.
 shiny_link <- external_link("https://shiny.posit.co/", "Shiny")
 marvel_link <- external_link("https://github.com/wenweixiong/MARVEL", "MARVEL")
 lasseigne_link <- external_link("https://www.lasseigne.org/", "Lasseigne Lab")
@@ -17,6 +19,9 @@ gene_reviews_link <- external_link("https://www.ncbi.nlm.nih.gov/books/NBK601394
 OMIM_link <- external_link("https://omim.org/entry/269150", "OMIM")
 GEO_link <- external_link("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE237816", "GEO")
 
+################################################################################
+# Welcome and about tab.
+################################################################################
 welcome_about <- tabPanel(
   title = "Welcome and About",
 
@@ -64,6 +69,9 @@ welcome_about <- tabPanel(
   )
 )
 
+################################################################################
+# Gene expression and splice junction usage tab.
+################################################################################
 plots <- tabPanel(
   title = "Gene Expression and Splice Junction Usage UMAPs",
 
@@ -171,6 +179,9 @@ plots <- tabPanel(
   )
 )
 
+################################################################################
+# Alternative splicing summaries tab.
+################################################################################
 as_gene_summary <- tabPanel(
   title = "Alternative Splicing Summaries",
 
@@ -197,6 +208,9 @@ as_gene_summary <- tabPanel(
   uiOutput("as_gene_summary_image")
 )
 
+################################################################################
+# Tab for frequently asked questions.
+################################################################################
 faq <- tabPanel(
   title = "FAQ",
 
@@ -310,6 +324,9 @@ faq <- tabPanel(
   )
 )
 
+################################################################################
+# Overall page layout.
+################################################################################
 ui <- navbarPage(
   includeCSS("www/styles.css"),
   useShinyjs(),
