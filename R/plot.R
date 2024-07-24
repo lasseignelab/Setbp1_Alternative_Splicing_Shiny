@@ -2,8 +2,6 @@ library(tidyverse)
 library(MARVEL)
 library(here)
 
-source("R/helpers.R")
-
 prerenderCellTypePlot <- function(data) {
 
   # The following cell_group_list code is based on code authored by Emma Jones.

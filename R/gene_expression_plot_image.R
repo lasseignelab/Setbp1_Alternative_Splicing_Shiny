@@ -12,7 +12,7 @@ gene_expression_plot_image <- function(data_file, data_name, gene) {
 
   plot <- plot +
     labs(title = glue("{data_name} Gene Expression for {gene}")) +
-    ggplotTheme()
+    ggplot_theme()
 
   outfile <- tempfile(fileext = ".png")
   png(outfile, height = 5, width = 6, units = "in", res = 300)
