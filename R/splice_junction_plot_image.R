@@ -14,7 +14,7 @@ splice_junction_plot_image <- function(data_file, data_name, splice_junction) {
 
   plot <- plot +
     labs(
-      title = glue("{data_name} Splice Junction Usage for {splice_junction}"),
+      title = glue("{data_name} SJU for {splice_junction}"),
       color = "SJU\nper\nCell"
     ) +
     ggplot_theme()
