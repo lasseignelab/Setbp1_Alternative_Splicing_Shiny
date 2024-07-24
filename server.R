@@ -130,21 +130,15 @@ server <- function(input, output, session) {
         div(
           h5("Genome Browsers", tags$small(input$gene)),
           p(
-            a(
-              href = glue("https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm39&position={gene_position}"),
-              target = "_blank",
-              "UCSC Genome Browser",
-              fa("external-link", "Launch"),
-              tags$i(class = "fa fa-external-link")
+            external_link(
+              glue("https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm39&position={gene_position}"),
+              "UCSC Genome Browser"
             )
           ),
           p(
-            a(
-              href = glue("https://useast.ensembl.org/Mus_musculus/Gene/Summary?db=core;g={input$gene}"),
-              target = "_blank",
-              "Ensembl Genome Browser",
-              fa("external-link", "Launch"),
-              tags$i(class = "fa fa-external-link")
+            external_link(
+              glue("https://useast.ensembl.org/Mus_musculus/Gene/Summary?db=core;g={input$gene}"),
+              "Ensembl Genome Browser"
             )
           )
         )
