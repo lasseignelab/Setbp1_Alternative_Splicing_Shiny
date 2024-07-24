@@ -86,20 +86,6 @@ server <- function(input, output, session) {
   # Setup the gene and splice junction selectors.
   # ****************************************************************************
   gene_list <- reactive(c(c(""), setbp1_metadata()$gene.metadata$gene_short_name %>% sort()))
-  gene_position <- reactive({
-    splice_junctions <- as.data.frame(setbp1_metadata()$sj.metadata) %>%
-      filter(gene_short_name.start == input$gene) %>%
-      select(coord.intron) %>%
-      arrange(coord.intron)
-    beginning <- strsplit(splice_junctions$coord.intron[1], ":")[[1]]
-    ending <- strsplit(splice_junctions$coord.intron[length(splice_junctions$coord.intron)], ":")[[1]]
-    list(
-      chromosome = beginning[1],
-      beginning = beginning[2],
-      ending = ending[3]
-    )
-  })
-
   splice_junction_list <- reactive({
     splice_junctions <- setbp1_metadata()$sj.metadata %>%
       filter(gene_short_name.start == input$gene)
@@ -121,30 +107,9 @@ server <- function(input, output, session) {
   observeEvent(input$gene, {
     gene_selected <- input$gene != ""
     if (gene_selected) {
-      output$genome_browsers <- renderUI({
-        gene_position <- paste0(
-          gene_position()$chromosome,
-          "%3A",
-          gene_position()$beginning,
-          "%2D",
-          gene_position()$ending
-        )
-        div(
-          h5("Genome Browsers", tags$small(input$gene)),
-          p(
-            external_link(
-              glue("https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm39&position={gene_position}"),
-              "UCSC Genome Browser"
-            )
-          ),
-          p(
-            external_link(
-              glue("https://useast.ensembl.org/Mus_musculus/Gene/Summary?db=core;g={input$gene}"),
-              "Ensembl Genome Browser"
-            )
-          )
-        )
-      })
+      output$genome_browsers <- renderUI(
+        genome_browser_links(setbp1_metadata(), input$gene)
+      )
       shinyjs::show("genome_browsers")
 
       updateSelectizeInput(
