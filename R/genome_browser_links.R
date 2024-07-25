@@ -1,4 +1,6 @@
 genome_browser_links <- function(setbp1_metadata, gene) {
+  if (gene == "") return()
+
   position <- gene_position(setbp1_metadata, gene)
   url_encoded_position <- paste0(
     position$chromosome,
