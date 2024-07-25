@@ -1,3 +1,16 @@
+################################################################################
+# Create an image of a splice junction usage plot.
+#
+# In order to stay inside the shinyapps.io memory limit this function reads the
+# data file, creates the plot as an image, and cleans everything up so that a
+# minimal amount of memory is used.
+#
+# @param data_file Name of the file to create the plot from.
+# @param data_name Name of the data to put in the plot title, i.e. Wildtype.
+# @param splice_junction Splice junction name of filter the data for the plot.
+# @return The name of the image file generated.
+################################################################################
+
 splice_junction_plot_image <- function(data_file, data_name, splice_junction) {
 
   gc()

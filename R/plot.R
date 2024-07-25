@@ -1,3 +1,18 @@
+################################################################################
+# This plotting script pre-renders the cell type plot.  The plot can be
+# pre-rendered because it always has all the cells and is not filtered so it
+# never changes.  It needed to be pre-rendered because it would exceed the
+# shinyapps.io memory limit.
+#
+# The data transformation from data.R needs to be ran first to generate the
+# setbp1_marvel_aligned_sans_gtf.rds file this script uses.
+#
+# Example usage in R console:
+#   > source("R/plot.R")
+#   > prerender_plots("original_data/setbp1_marvel_aligned_sans_gtf.rds")
+#
+################################################################################
+
 library(tidyverse)
 library(MARVEL)
 library(here)

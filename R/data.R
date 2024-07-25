@@ -1,3 +1,18 @@
+################################################################################
+# This data processing script transforms a MARVEL data file from the paper
+# into smaller files specific to the plots being generated.  This transformation
+# was needed to overcome shinyapps.io limitations on disk space and memory.
+#
+# To run the data transformation, download the source file from
+# "EmmaJones/240227_MARVEL_DATA/setbp1_marvel_aligned.rds" in the lasseigne_lab
+# folder on Cheaha into the "original_data" folder in the project.
+#
+# Example usage in R console:
+#   > source("R/data.R")
+#   > prepare_data("original_data/setbp1_marvel_aligned.rds")
+#
+################################################################################
+
 library(tidyverse)
 library(plyr)
 library(ggplot2)

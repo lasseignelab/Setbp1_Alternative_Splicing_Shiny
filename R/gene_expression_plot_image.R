@@ -1,3 +1,16 @@
+################################################################################
+# Create an image of a gene expression plot.
+#
+# In order to stay inside the shinyapps.io memory limit this function reads the
+# data file, creates the plot as an image, and cleans everything up so that a
+# minimal amount of memory is used.
+#
+# @param data_file Name of the file to create the plot from.
+# @param data_name Name of the data to put in the plot title, i.e. Wildtype
+# @param gene Gene name of filter the data for the plot.
+# @return The name of the image file generated.
+################################################################################
+
 gene_expression_plot_image <- function(data_file, data_name, gene) {
   gc()
   setbp1 <- readRDS(data_file)
