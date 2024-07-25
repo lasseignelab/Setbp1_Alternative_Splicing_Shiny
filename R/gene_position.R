@@ -3,8 +3,14 @@ gene_position <- function(setbp1_metadata, gene) {
     filter(gene_short_name.start == gene) %>%
     select(coord.intron) %>%
     arrange(coord.intron)
-  beginning <- strsplit(splice_junctions$coord.intron[1], ":")[[1]]
-  ending <- strsplit(splice_junctions$coord.intron[length(splice_junctions$coord.intron)], ":")[[1]]
+  beginning <- strsplit(
+    splice_junctions$coord.intron[1],
+    ":"
+  )[[1]]
+  ending <- strsplit(
+    splice_junctions$coord.intron[length(splice_junctions$coord.intron)],
+    ":"
+  )[[1]]
 
   list(
     chromosome = beginning[1],

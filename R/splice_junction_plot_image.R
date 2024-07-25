@@ -3,12 +3,12 @@ splice_junction_plot_image <- function(data_file, data_name, splice_junction) {
   gc()
   setbp1 <- readRDS(data_file)
   plot <- PlotValues.PCA.PSI.10x(
-    MarvelObject=setbp1,
-    coord.intron=splice_junction,
-    min.gene.count=3,
-    color.gradient=plasma(5),
+    MarvelObject = setbp1,
+    coord.intron = splice_junction,
+    min.gene.count = 3,
+    color.gradient = plasma(5),
     log2.transform = FALSE,
-    type="umap"
+    type = "umap"
   )
   setbp1 <- NULL
 

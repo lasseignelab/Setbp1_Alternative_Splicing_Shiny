@@ -27,7 +27,12 @@ server <- function(input, output, session) {
   # Github and setup gene selector with image display.
   # ****************************************************************************
   as_gene_summary_json <- reactive({
-    gh("/repos/lasseignelab/230926_EJ_Setbp1_AlternativeSplicing/contents/results/as_gene_summaries/")
+    gh(
+      paste0(
+        "/repos/lasseignelab/230926_EJ_Setbp1_AlternativeSplicing",
+        "/contents/results/as_gene_summaries/"
+      )
+    )
   })
 
   as_gene_summary_names <- reactive({
@@ -54,7 +59,9 @@ server <- function(input, output, session) {
   output$as_gene_summary_image <- renderUI({
     as_summary_gene_selected <- input$as_summary_gene != ""
     if (as_summary_gene_selected) {
-      url <- as_gene_summary_urls()[which(as_gene_summary_names() == input$as_summary_gene)]
+      url <- as_gene_summary_urls()[
+        which(as_gene_summary_names() == input$as_summary_gene)
+      ]
       mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
       selected_gene <- em(input$as_summary_gene)
 
@@ -64,18 +71,18 @@ server <- function(input, output, session) {
           p(HTML(glue("
             (A) Transcript of all annotated transcripts of {selected_gene}.
             The color indicates transcript classification: indigo = transcripts
-            flagged for nonsense-mediated decay (NMD), dark teal = protein-coding
-            transcripts, turquoise = protein-coding transcripts, but coding
-            sequence (CDS) is not defined, and green = transcripts with retained
-            intron events. Arrows indicate the direction of transcription. (B)
-            Split violin plots showing {selected_gene} expression per cell for
-            all cell types, split by condition. (C) Heatmaps of the changes in
-            normalized mean SJ expression (top) and usage (bottom) between
-            {mouse_gene} mice and controls for all SJs of {selected_gene}. The top
-            heatmap annotation indicates cell type. A positive delta indicates
-            expression or usage was higher in {mouse_gene} mice than controls, and
-            a negative indicates expression or usage was higher in controls
-            compared to {mouse_gene} mice.
+            flagged for nonsense-mediated decay (NMD), dark teal =
+            protein-coding transcripts, turquoise = protein-coding transcripts,
+            but coding sequence (CDS) is not defined, and green = transcripts
+            with retained intron events. Arrows indicate the direction of
+            transcription. (B) Split violin plots showing {selected_gene}
+            expression per cell for all cell types, split by condition. (C)
+            Heatmaps of the changes in normalized mean SJ expression (top) and
+            usage (bottom) between {mouse_gene} mice and controls for all SJs of
+            {selected_gene}. The top heatmap annotation indicates cell type. A
+            positive delta indicates expression or usage was higher in
+            {mouse_gene} mice than controls, and a negative indicates expression
+            or usage was higher in controls compared to {mouse_gene} mice.
           ")))
         )
       )
@@ -85,7 +92,12 @@ server <- function(input, output, session) {
   # ****************************************************************************
   # Setup the gene and splice junction selectors.
   # ****************************************************************************
-  gene_list <- reactive(c(c(""), setbp1_metadata()$gene.metadata$gene_short_name %>% sort()))
+  gene_list <- reactive(
+    c(
+      c(""),
+      setbp1_metadata()$gene.metadata$gene_short_name %>% sort()
+    )
+  )
   splice_junction_list <- reactive({
     splice_junctions <- setbp1_metadata()$sj.metadata %>%
       filter(gene_short_name.start == input$gene)
@@ -235,7 +247,9 @@ server <- function(input, output, session) {
   })
 
   output$wildtype_gene_expression_download <- downloadHandler(
-    filename = function() {"plot.png"},
+    filename = function() {
+      "plot.png"
+    },
     content = function(file) {
       image_file <- gene_expression_plot_image(
         "./data/setbp1_marvel_aligned_wildtype_gene.rds",
@@ -278,7 +292,9 @@ server <- function(input, output, session) {
   })
 
   output$mutant_gene_expression_download <- downloadHandler(
-    filename = function() {"plot.png"},
+    filename = function() {
+      "plot.png"
+    },
     content = function(file) {
       image_file <- gene_expression_plot_image(
         "./data/setbp1_marvel_aligned_mutant_gene.rds",
@@ -309,12 +325,12 @@ server <- function(input, output, session) {
     splice_junction <- splice_junction()
     tagList(
       HTML(glue("
-        This UMAP displays the splice junction usage (SJU) values for splice junction
-        {splice_junction} from {gene} in wild-type mouse cerebral cortex tissue
-        cells. A brighter color indicates a higher usage level. Please note that
-        our manuscript does not use SJU values per cell, and SJU is a single
-        number calculated for an entire population of cells, such as patient
-        variant cells of a specific cell type.
+        This UMAP displays the splice junction usage (SJU) values for splice
+        junction {splice_junction} from {gene} in wild-type mouse cerebral
+        cortex tissue cells. A brighter color indicates a higher usage level.
+        Please note that our manuscript does not use SJU values per cell, and
+        SJU is a single number calculated for an entire population of cells,
+        such as patient variant cells of a specific cell type.
       ")),
       downloadLink(
         "wildtype_splice_junction_download",
@@ -324,7 +340,9 @@ server <- function(input, output, session) {
   })
 
   output$wildtype_splice_junction_download <- downloadHandler(
-    filename = function() {"plot.png"},
+    filename = function() {
+      "plot.png"
+    },
     content = function(file) {
       image_file <- splice_junction_plot_image(
         "./data/setbp1_marvel_aligned_wildtype_sj.rds",
@@ -356,12 +374,12 @@ server <- function(input, output, session) {
     mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
     tagList(
       HTML(glue("
-        This UMAP displays the splice junction usage (SJU) values for splice junction
-        {splice_junction} from {gene} in {mouse_gene} mouse cerebral cortex tissue
-        cells. A brighter color indicates a higher usage level. Please note that
-        our manuscript does not use SJU values per cell, and SJU is a single number
-        calculated for an entire population of cells, such as patient variant cells
-        of a specific cell type.
+        This UMAP displays the splice junction usage (SJU) values for splice
+        junction {splice_junction} from {gene} in {mouse_gene} mouse cerebral
+        cortex tissue cells. A brighter color indicates a higher usage level.
+        Please note that our manuscript does not use SJU values per cell, and
+        SJU is a single number calculated for an entire population of cells,
+        such as patient variant cells of a specific cell type.
       ")),
       downloadLink(
         "mutant_splice_junction_download",
@@ -371,7 +389,9 @@ server <- function(input, output, session) {
   })
 
   output$mutant_splice_junction_download <- downloadHandler(
-    filename = function() {"plot.png"},
+    filename = function() {
+      "plot.png"
+    },
     content = function(file) {
       image_file <- splice_junction_plot_image(
         "./data/setbp1_marvel_aligned_mutant_sj.rds",

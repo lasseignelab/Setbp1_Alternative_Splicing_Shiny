@@ -2,7 +2,7 @@ library(tidyverse)
 library(MARVEL)
 library(here)
 
-prerenderCellTypePlot <- function(data) {
+prerender_cell_type_plot <- function(data) {
 
   # The following cell_group_list code is based on code authored by Emma Jones.
   # 230926_EJ_Setbp1_AlternativeSplicing/src/marvel/03_analyze_de_genes.Rmd
@@ -42,7 +42,7 @@ prerenderCellTypePlot <- function(data) {
     cell.group.list = cell_group_list,
     point.colors = cell_type_colors,
     point.size.legend = 7,
-    legendtitle="Cell group",
+    legendtitle = "Cell group",
     type = "umap"
   )
   plot$adhocPlot$PCA$CellGroup <- plot$adhocPlot$PCA$CellGroup +
@@ -57,7 +57,7 @@ prerenderCellTypePlot <- function(data) {
   dev.off()
 }
 
-prerenderPlots <- function(filename) {
+prerender_plots <- function(filename) {
   data <- readRDS(filename)
-  prerenderCellTypePlot(data)
+  prerender_cell_type_plot(data)
 }

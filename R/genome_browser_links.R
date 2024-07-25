@@ -12,13 +12,19 @@ genome_browser_links <- function(setbp1_metadata, gene) {
     h5("Genome Browsers", tags$small(gene)),
     p(
       external_link(
-        glue("https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm39&position={url_encoded_position}"),
+        glue(
+          "https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm39&position=",
+          "{url_encoded_position}"
+        ),
         "UCSC Genome Browser"
       )
     ),
     p(
       external_link(
-        glue("https://useast.ensembl.org/Mus_musculus/Gene/Summary?db=core;g={gene}"),
+        glue(
+          "https://useast.ensembl.org/Mus_musculus/Gene/Summary?db=core;g=",
+          "{gene}"
+        ),
         "Ensembl Genome Browser"
       )
     )

@@ -12,12 +12,27 @@ human_gene <- em("SETBP1")
 shiny_link <- external_link("https://shiny.posit.co/", "Shiny")
 marvel_link <- external_link("https://github.com/wenweixiong/MARVEL", "MARVEL")
 lasseigne_link <- external_link("https://www.lasseigne.org/", "Lasseigne Lab")
-jones_paper_link <- external_link("https://www.biorxiv.org/content/10.1101/2024.06.26.600823v1", "Jones et al., 2024")
-whitlock_paper_link <- external_link("https://doi.org/10.1111/jcmm.18001", "Whitlock et al., 2023")
-medline_link <- external_link("https://medlineplus.gov/genetics/condition/schinzel-giedion-syndrome/", "Medline")
-gene_reviews_link <- external_link("https://www.ncbi.nlm.nih.gov/books/NBK601394/", "GeneReviews")
-OMIM_link <- external_link("https://omim.org/entry/269150", "OMIM")
-GEO_link <- external_link("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE237816", "GEO")
+jones_paper_link <- external_link(
+  "https://www.biorxiv.org/content/10.1101/2024.06.26.600823v1",
+  "Jones et al., 2024"
+)
+whitlock_paper_link <- external_link(
+  "https://doi.org/10.1111/jcmm.18001",
+  "Whitlock et al., 2023"
+)
+medline_link <- external_link(
+  "https://medlineplus.gov/genetics/condition/schinzel-giedion-syndrome/",
+  "Medline"
+)
+gene_reviews_link <- external_link(
+  "https://www.ncbi.nlm.nih.gov/books/NBK601394/",
+  "GeneReviews"
+)
+omim_link <- external_link("https://omim.org/entry/269150", "OMIM")
+geo_link <- external_link(
+  "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE237816",
+  "GEO"
+)
 
 ################################################################################
 # Welcome and about tab.
@@ -34,22 +49,23 @@ welcome_about <- tabPanel(
   ),
   p(
     HTML(glue("
-      This application accompanies our manuscript, Cell-type-specific alternative
-      splicing in the cerebral cortex of a Schinzel-Giedion Syndrome patient
-      variant mouse model, which is available on bioRxiv ({jones_paper_link}). In our
-      manuscript, we quantified gene and splice junction (SJ) expression for
-      51,465 nuclei previously generated ({whitlock_paper_link}) from the cerebral
-      cortex of atypical {mouse_gene} SGS patient variant mice (n = 3) and
-      wild-type control mice (n = 3). After cell type annotation, we performed
-      pseudobulk differential gene expression and SJ usage (SJU) analyses across
-      cell types and conditions. We identified 34 genes with statistically
-      significant alterations in SJU. Oligodendrocytes had the most genes with
-      changes in SJU, followed by astrocytes, excitatory, and inhibitory neurons.
-      One gene, Son, a splicing cofactor known to cause the neurodevelopmental
-      disorder ZTTK Syndrome, had SJU changes in all six non-vascular cell types
-      we measured in {mouse_gene} compared to controls. This is the first research
-      to report cell-type-specific AS changes in the cerebral cortex of an SGS
-      model and the first study to link SGS to perturbations in Son.
+      This application accompanies our manuscript, Cell-type-specific
+      alternative splicing in the cerebral cortex of a Schinzel-Giedion Syndrome
+      patient variant mouse model, which is available on bioRxiv
+      ({jones_paper_link}). In our manuscript, we quantified gene and splice
+      junction (SJ) expression for 51,465 nuclei previously generated
+      ({whitlock_paper_link}) from the cerebral cortex of atypical {mouse_gene}
+      SGS patient variant mice (n = 3) and wild-type control mice (n = 3).
+      After cell type annotation, we performed pseudobulk differential gene
+      expression and SJ usage (SJU) analyses across cell types and conditions.
+      We identified 34 genes with statistically significant alterations in SJU.
+      Oligodendrocytes had the most genes with changes in SJU, followed by
+      astrocytes, excitatory, and inhibitory neurons. One gene, Son, a splicing
+      cofactor known to cause the neurodevelopmental disorder ZTTK Syndrome, had
+      SJU changes in all six non-vascular cell types we measured in {mouse_gene}
+      compared to controls. This is the first research to report
+      cell-type-specific AS changes in the cerebral cortex of an SGS model and
+      the first study to link SGS to perturbations in Son.
     "))
   ),
   img(src = "setbp1.png", width = "100%", height = "auto"),
@@ -57,14 +73,14 @@ welcome_about <- tabPanel(
     strong("Graphical Abstract."),
     HTML(glue("
       (A) Schematic overview of our processing and analysis
-      pipeline. (B) We analyzed pseudobulk gene expression and calculated SJU for
-      each cell type and condition. (C) We compared SJU values for each cell type
-      using a permutation test to identify cell-type-specific differences in AS
-      between {mouse_gene} and wild-type mouse brain tissue. (D) Next, we visualized
-      all annotated transcripts and splice junction locations for each significant
-      SJU gene. (E) Finally, we compared the genes and pathways identified through
-      functional enrichment analysis that overlap between cell types and predict
-      their biological relevance.
+      pipeline. (B) We analyzed pseudobulk gene expression and calculated SJU
+      for each cell type and condition. (C) We compared SJU values for each cell
+      type using a permutation test to identify cell-type-specific differences
+      in AS between {mouse_gene} and wild-type mouse brain tissue. (D) Next, we
+      visualized all annotated transcripts and splice junction locations for
+      each significant SJU gene. (E) Finally, we compared the genes and pathways
+      identified through functional enrichment analysis that overlap between
+      cell types and predict their biological relevance.
     "))
   )
 )
@@ -143,14 +159,22 @@ plots <- tabPanel(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("wildtype_gene_expression_plot", width = "100%", height = "auto")
+            plotOutput(
+              "wildtype_gene_expression_plot",
+              width = "100%",
+              height = "auto"
+            )
           ),
           uiOutput("wildtype_gene_expression_legend")
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("mutant_gene_expression_plot", width = "100%", height = "auto")
+            plotOutput(
+              "mutant_gene_expression_plot",
+              width = "100%",
+              height = "auto"
+            )
           ),
           uiOutput("mutant_gene_expression_legend")
         )
@@ -163,14 +187,22 @@ plots <- tabPanel(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("wildtype_splice_junction_plot", width = "100%", height = "auto")
+            plotOutput(
+              "wildtype_splice_junction_plot",
+              width = "100%",
+              height = "auto"
+            )
           ),
           uiOutput("wildtype_splice_junction_legend")
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput("mutant_splice_junction_plot", width = "100%", height = "auto")
+            plotOutput(
+              "mutant_splice_junction_plot",
+              width = "100%",
+              height = "auto"
+            )
           ),
           uiOutput("mutant_splice_junction_legend")
         )
@@ -224,14 +256,14 @@ faq <- tabPanel(
         "))),
         tags$li("
           Symptoms of SGS include global neurodevelopmental impairment,
-          progressive neurodegeneration, mild-to-profound intellectual disability,
-          treatment-resistant seizures, distinctive craniofacial structure,
-          muscle hypotonia/spasticity, hydronephrosis, and gastrointestinal
-          problems.
+          progressive neurodegeneration, mild-to-profound intellectual
+          disability, treatment-resistant seizures, distinctive craniofacial
+          structure, muscle hypotonia/spasticity, hydronephrosis, and
+          gastrointestinal problems.
         "),
         tags$li(HTML(glue("
           For more information on SGS, refer to {medline_link},
-          {gene_reviews_link}, or {OMIM_link}.
+          {gene_reviews_link}, or {omim_link}.
         ")))
       )
     )
@@ -251,7 +283,8 @@ faq <- tabPanel(
           how we generated this data set.
         "))),
         tags$li(HTML(glue("
-          This data is publicly accessible for download from {GEO_link} at GSE237816.
+          This data is publicly accessible for download from {geo_link} at
+          GSE237816.
         ")))
       )
     )
@@ -331,7 +364,10 @@ ui <- navbarPage(
   includeCSS("www/styles.css"),
   useShinyjs(),
 
-  title = "Visualizing Cell-Type-Specific Alternative Splicing in an Schinzel-Giedion Syndrome Mouse Model",
+  title = "
+    Visualizing Cell-Type-Specific Alternative Splicing in an Schinzel-Giedion
+    Syndrome Mouse Model
+  ",
   welcome_about,
   plots,
   as_gene_summary,
@@ -340,8 +376,13 @@ ui <- navbarPage(
   tags$footer(class = "footer",
     div(class = "container",
       p(class = "text-center",
-        HTML(glue("Figures created with BioRender.com | Copyright 2024 by the {lasseigne_link}")),
-        a(href = "https://www.lasseigne.org/", target = "_blank", img(src = "logo_only.png", height = "50px"))
+        "Figures created with BioRender.com | Copyright 2024 by the ",
+        HTML(glue("{lasseigne_link}")),
+        a(
+          href = "https://www.lasseigne.org/",
+          target = "_blank",
+          img(src = "logo_only.png", height = "50px")
+        )
       ),
     )
   )

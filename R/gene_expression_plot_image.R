@@ -2,11 +2,11 @@ gene_expression_plot_image <- function(data_file, data_name, gene) {
   gc()
   setbp1 <- readRDS(data_file)
   plot <- PlotValues.PCA.Gene.10x(
-    MarvelObject=setbp1,
-    gene_short_name=gene,
-    color.gradient=viridis(5),
+    MarvelObject = setbp1,
+    gene_short_name = gene,
+    color.gradient = viridis(5),
     log2.transform = FALSE,
-    type="umap"
+    type = "umap"
   )
   setbp1 <- NULL
 

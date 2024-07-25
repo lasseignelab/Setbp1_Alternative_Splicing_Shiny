@@ -17,10 +17,11 @@ metadata <- function(setbp1) {
 wildtype_setbp1 <- function(setbp1) {
   data <- setbp1
   data$sample.metadata <- data$sample.metadata %>%
-    filter(seq_folder == 'wildtype')
+    filter(seq_folder == "wildtype")
   data$pca <- data$pca[data$pca$cell.id %in% data$sample.metadata$cell.id, ]
   data$gene.norm.matrix <- data$gene.norm.matrix[, data$sample.metadata$cell.id]
-  data$gene.count.matrix <- data$gene.count.matrix[, data$sample.metadata$cell.id]
+  data$gene.count.matrix <-
+    data$gene.count.matrix[, data$sample.metadata$cell.id]
   data$sj.count.matrix <- data$sj.count.matrix[, data$sample.metadata$cell.id]
 
   data$sample.metadata <- NULL
@@ -33,16 +34,20 @@ wildtype_setbp1 <- function(setbp1) {
 
   splice_junction_data <- data
   splice_junction_data$gene.norm.matrix <- NULL
-  saveRDS(splice_junction_data, file = "data/setbp1_marvel_aligned_wildtype_sj.rds")
+  saveRDS(
+    splice_junction_data,
+    file = "data/setbp1_marvel_aligned_wildtype_sj.rds"
+  )
 }
 
 mutant_setbp1 <- function(setbp1) {
   data <- setbp1
   data$sample.metadata <- data$sample.metadata %>%
-    filter(seq_folder == 'mutant')
+    filter(seq_folder == "mutant")
   data$pca <- data$pca[data$pca$cell.id %in% data$sample.metadata$cell.id, ]
   data$gene.norm.matrix <- data$gene.norm.matrix[, data$sample.metadata$cell.id]
-  data$gene.count.matrix <- data$gene.count.matrix[, data$sample.metadata$cell.id]
+  data$gene.count.matrix <-
+    data$gene.count.matrix[, data$sample.metadata$cell.id]
   data$sj.count.matrix <- data$sj.count.matrix[, data$sample.metadata$cell.id]
 
   data$sample.metadata <- NULL
@@ -55,17 +60,23 @@ mutant_setbp1 <- function(setbp1) {
 
   splice_junction_data <- data
   splice_junction_data$gene.norm.matrix <- NULL
-  saveRDS(splice_junction_data, file = "data/setbp1_marvel_aligned_mutant_sj.rds")
+  saveRDS(
+    splice_junction_data,
+    file = "data/setbp1_marvel_aligned_mutant_sj.rds"
+  )
 }
 
-prepareData <- function(filename) {
+prepare_data <- function(filename) {
   print("*** Loading MARVEL data file.")
   setbp1 <- readRDS(filename)
 
   setbp1$gtf <- NULL
 
   print("*** Saving MARVEL data sans gtf for cell type plot rendering.")
-  saveRDS(setbp1, file = paste0(dirname(filename), "/setbp1_marvel_aligned_sans_gtf.rds"))
+  saveRDS(
+    setbp1,
+    file = paste0(dirname(filename), "/setbp1_marvel_aligned_sans_gtf.rds")
+  )
 
   print("*** Saving metadata file.")
   metadata(setbp1)
