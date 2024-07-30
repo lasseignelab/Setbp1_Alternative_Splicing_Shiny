@@ -1,4 +1,4 @@
-print(paste("pid =", Sys.getpid()))
+message("pid = ", Sys.getpid())
 
 options(shiny.autoreload = TRUE)
 options(shiny.trace = TRUE)

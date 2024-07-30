@@ -82,29 +82,29 @@ mutant_setbp1 <- function(setbp1) {
 }
 
 prepare_data <- function(filename) {
-  print("*** Loading MARVEL data file.")
+  message("*** Loading MARVEL data file.")
   setbp1 <- readRDS(filename)
 
   setbp1$gtf <- NULL
 
-  print("*** Saving MARVEL data sans gtf for cell type plot rendering.")
+  message("*** Saving MARVEL data sans gtf for cell type plot rendering.")
   saveRDS(
     setbp1,
     file = paste0(dirname(filename), "/setbp1_marvel_aligned_sans_gtf.rds")
   )
 
-  print("*** Saving metadata file.")
+  message("*** Saving metadata file.")
   metadata(setbp1)
 
-  print("*** Removing unused metadata.")
+  message("*** Removing unused metadata.")
   setbp1$sj.metadata$gene_short_name.end <- NULL
   setbp1$sj.metadata$sj.type <- NULL
   setbp1$gene.metadata <- NULL
 
-  print("*** Creating wild-type files.")
+  message("*** Creating wild-type files.")
   wildtype_setbp1(setbp1)
-  print("*** Creating mutant files.")
+  message("*** Creating mutant files.")
   mutant_setbp1(setbp1)
 
-  print("*** Done.")
+  message("*** Done.")
 }
