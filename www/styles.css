@@ -1,5 +1,9 @@
 /* Custom app styles
 -------------------------------------------------- */
+.larger-text {
+  font-size: 1.5em;
+}
+
 .plot-pair {
   margin-top: 50px;
 }

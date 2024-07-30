@@ -40,7 +40,7 @@ geo_link <- external_link(
 welcome_about <- tabPanel(
   title = "Welcome and About",
 
-  p(
+  p(class = "larger-text",
     HTML(glue("
       Welcome to the {shiny_link} application created by Anthony Crumley in
       the {lasseigne_link} to visualize gene expression and splice junction
