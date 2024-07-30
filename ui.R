@@ -7,6 +7,7 @@ library(glue)
 mouse <- paste("C57BL/6JSetbp1", tags$sup("em2Lutzy"), "/J")
 mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
 human_gene <- em("SETBP1")
+son_gene <- em("Son")
 
 # External links used throughout the app for references.
 shiny_link <- external_link("https://shiny.posit.co/", "Shiny")
@@ -60,12 +61,12 @@ welcome_about <- tabPanel(
       expression and SJ usage (SJU) analyses across cell types and conditions.
       We identified 34 genes with statistically significant alterations in SJU.
       Oligodendrocytes had the most genes with changes in SJU, followed by
-      astrocytes, excitatory, and inhibitory neurons. One gene, Son, a splicing
+      astrocytes, excitatory, and inhibitory neurons. One gene, {son_gene}, a splicing
       cofactor known to cause the neurodevelopmental disorder ZTTK Syndrome, had
       SJU changes in all six non-vascular cell types we measured in {mouse_gene}
       compared to controls. This is the first research to report
       cell-type-specific AS changes in the cerebral cortex of an SGS model and
-      the first study to link SGS to perturbations in Son.
+      the first study to link SGS to perturbations in {son_gene}.
     "))
   ),
   img(src = "setbp1.png", width = "100%", height = "auto"),
