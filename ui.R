@@ -351,7 +351,7 @@ faq <- tabPanel(
         "),
         tags$li("
           For questions about our manuscript, please contact
-          efjones(at)uab(dot)edu or bnp0001(at)uab(edu)edu
+          efjones(at)uab(dot)edu or bnp0001(at)uab(dot)edu
         ")
       )
     )
@@ -366,7 +366,7 @@ ui <- navbarPage(
   useShinyjs(),
 
   title = "
-    Visualizing Cell-Type-Specific Alternative Splicing in an Schinzel-Giedion
+    Visualizing Cell-Type-Specific Alternative Splicing in a Schinzel-Giedion
     Syndrome Mouse Model
   ",
   welcome_about,
