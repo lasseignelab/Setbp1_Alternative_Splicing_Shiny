@@ -41,7 +41,7 @@ geo_link <- external_link(
 welcome_about <- tabPanel(
   title = "Welcome and About",
 
-  p(class = "larger-text",
+  p(
     HTML(glue("
       Welcome to the {shiny_link} application created by Anthony Crumley in
       the {lasseigne_link} to visualize gene expression and splice junction
@@ -61,10 +61,10 @@ welcome_about <- tabPanel(
       expression and SJ usage (SJU) analyses across cell types and conditions.
       We identified 34 genes with statistically significant alterations in SJU.
       Oligodendrocytes had the most genes with changes in SJU, followed by
-      astrocytes, excitatory, and inhibitory neurons. One gene, {son_gene}, a splicing
-      cofactor known to cause the neurodevelopmental disorder ZTTK Syndrome, had
-      SJU changes in all six non-vascular cell types we measured in {mouse_gene}
-      compared to controls. This is the first research to report
+      astrocytes, excitatory, and inhibitory neurons. One gene, {son_gene}, a
+      splicing cofactor known to cause the neurodevelopmental disorder ZTTK
+      Syndrome, had SJU changes in all six non-vascular cell types we measured
+      in {mouse_gene} compared to controls. This is the first research to report
       cell-type-specific AS changes in the cerebral cortex of an SGS model and
       the first study to link SGS to perturbations in {son_gene}.
     "))
@@ -384,7 +384,7 @@ ui <- navbarPage(
           target = "_blank",
           img(src = "logo_only.png", height = "50px")
         )
-      ),
+      )
     )
   )
 )
