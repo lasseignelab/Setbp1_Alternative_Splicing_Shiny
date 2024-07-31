@@ -327,7 +327,7 @@ faq <- tabPanel(
           of sequencing reads for a splice junction by the total number of reads
           for that gene for a given cell type/condition.
         "),
-        tags$li(img(src = "sj_usage.png"))
+        tags$li(img(src = "sj_usage.png", width = "50%", height = "auto"))
       )
     )
   ),
