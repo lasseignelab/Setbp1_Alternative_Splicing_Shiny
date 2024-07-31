@@ -4,8 +4,8 @@ library(shinycssloaders)
 library(glue)
 
 # Mouse and gene names with proper formatting.
-mouse <- paste("C57BL/6JSetbp1", tags$sup("em2Lutzy"), "/J")
-mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
+mouse <- paste0("C57BL/6JSetbp1", tags$sup("em2Lutzy"), "/J")
+mouse_gene <- paste0(em("Setbp1"), tags$sup("S858R"))
 human_gene <- em("SETBP1")
 son_gene <- em("Son")
 
