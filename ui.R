@@ -323,6 +323,19 @@ faq <- tabPanel(
     tags$dd(
       tags$ul(
         tags$li("
+          Splice junction usage (SJU) is the proportion of gene sequencing reads
+          that include a given splice junction. SJU can be used as evidence of
+          alternative splicing but can also represent a canonical splicing
+          event, depending on the observed splice junction.
+        ")
+      )
+    )
+  ),
+  tags$dl(
+    tags$dt("How is splice junction usage calculated?"),
+    tags$dd(
+      tags$ul(
+        tags$li("
           Splice junction usage (SJU) is calculated by dividing the total number
           of sequencing reads for a splice junction by the total number of reads
           for that gene for a given cell type/condition.
