@@ -1,0 +1,36 @@
+/* Custom app styles
+-------------------------------------------------- */
+body {
+  font-size: 1.75em;
+}
+
+.plot-pair {
+  margin-top: 50px;
+}
+
+.tab-content {
+  width: 90%;
+  margin: 0 auto; /* Center horzontally */
+}
+
+.validation-messages {
+  margin-top: 20px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 100px; /* Margin bottom by footer height and padding-top */
+}
+
+.footer {
+  padding-top: 20px;
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  height: 80px; /* Set the fixed height of the footer here */
+}
