@@ -90,7 +90,7 @@ welcome_about <- tabPanel(
 # Gene expression and splice junction usage tab.
 ################################################################################
 plots <- tabPanel(
-  title = "Gene Expression and Splice Junction Usage UMAPs",
+  title = "Gene Expression and SJU UMAPs",
 
   sidebarLayout(
     sidebarPanel(
