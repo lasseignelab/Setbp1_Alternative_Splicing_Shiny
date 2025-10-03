@@ -95,13 +95,21 @@ plots <- tabPanel(
   sidebarLayout(
     sidebarPanel(
       selectizeInput(
+        "expression_tissue",
+        "Tissue",
+        choices = c("Brain" = "brain", "Kidney" = "kidney"),
+        options = list(
+          maxItems = 1
+        )
+      ),
+      selectizeInput(
         "gene",
         "Gene",
         choices = NULL,
         options = list(
           maxOptions = 20,
           maxItems = 1,
-          placeholder = "Loading..."
+          placeholder = "Enter gene name to search"
         )
       ),
       helpText("Search for a gene to plot gene expression."),
@@ -227,6 +235,14 @@ as_gene_summary <- tabPanel(
     of these 34 significant SJU genes, please select a gene here! For more
     information, please refer to our manuscript ({jones_paper_link}).
   "))),
+  selectizeInput(
+    "as_summary_tissue",
+    "Tissue",
+    choices = c("Brain" = "brain", "Kidney" = "kidney"),
+    options = list(
+      maxItems = 1
+    )
+  ),
   selectizeInput(
     "as_summary_gene",
     "Gene",

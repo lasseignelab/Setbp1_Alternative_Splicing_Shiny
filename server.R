@@ -19,7 +19,11 @@ server <- function(input, output, session) {
   # Load MARVEL data and split into wildtype and mutant for separate plotting.
   # ****************************************************************************
   setbp1_metadata <- reactive({
-    readRDS("./data/setbp1_marvel_aligned_metadata.rds")
+    readRDS("./data/setbp1_brain_marvel_aligned_metadata.rds")
+  })
+
+  input_file_base <- reactive({
+    paste0("./data/setbp1_", input$expression_tissue, "_marvel_aligned")
   })
 
   # ****************************************************************************
@@ -110,7 +114,7 @@ server <- function(input, output, session) {
       "gene",
       choices = gene_list(),
       options = list(
-        placeholder = "Search for a gene"
+        placeholder = "Enter gene name to search"
       ),
       server = TRUE
     )
@@ -222,7 +226,7 @@ server <- function(input, output, session) {
       gene_selected <- gene() != ""
       if (gene_selected) {
         image_file <- gene_expression_plot_image(
-          "./data/setbp1_marvel_aligned_wildtype_gene.rds",
+          paste0(input_file_base(), "_wildtype_gene.rds"),
           "Wild-type",
           gene()
         )
@@ -252,7 +256,7 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       image_file <- gene_expression_plot_image(
-        "./data/setbp1_marvel_aligned_wildtype_gene.rds",
+        paste0(input_file_base(), "_wildtype_gene.rds"),
         "Wild-type",
         gene()
       )
@@ -266,7 +270,7 @@ server <- function(input, output, session) {
       gene_selected <- gene() != ""
       if (gene_selected) {
         image_file <- gene_expression_plot_image(
-          "./data/setbp1_marvel_aligned_mutant_gene.rds",
+          paste0(input_file_base(), "_mutant_gene.rds"),
           "<i>Setbp1</i><sup>S858R</sup>",
           gene()
         )
@@ -297,7 +301,7 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       image_file <- gene_expression_plot_image(
-        "./data/setbp1_marvel_aligned_mutant_gene.rds",
+        paste0(input_file_base(), "_mutant_gene.rds"),
         "<i>Setbp1</i><sup>S858R</sup>",
         gene()
       )
@@ -311,7 +315,7 @@ server <- function(input, output, session) {
       splice_junction_selected <- splice_junction() != ""
       if (splice_junction_selected) {
         image_file <- splice_junction_plot_image(
-          "./data/setbp1_marvel_aligned_wildtype_sj.rds",
+          paste0(input_file_base(), "_wildtype_sj.rds"),
           "Wild-type",
           splice_junction()
         )
@@ -345,7 +349,7 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       image_file <- splice_junction_plot_image(
-        "./data/setbp1_marvel_aligned_wildtype_sj.rds",
+        paste0(input_file_base(), "_wildtype_sj.rds"),
         "Wild-type",
         splice_junction()
       )
@@ -359,7 +363,7 @@ server <- function(input, output, session) {
       splice_junction_selected <- splice_junction() != ""
       if (splice_junction_selected) {
         image_file <- splice_junction_plot_image(
-          "./data/setbp1_marvel_aligned_mutant_sj.rds",
+          paste0(input_file_base(), "_mutant_sj.rds"),
           "<i>Setbp1</i><sup>S858R</sup>",
           splice_junction()
         )
@@ -394,7 +398,7 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       image_file <- splice_junction_plot_image(
-        "./data/setbp1_marvel_aligned_mutant_sj.rds",
+        paste0(input_file_base(), "_mutant_sj.rds"),
         "<i>Setbp1</i><sup>S858R</sup>",
         splice_junction()
       )
