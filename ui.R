@@ -152,14 +152,7 @@ plots <- tabPanel(
     ),
 
     mainPanel(
-      img(src = "cell_types.png", width = "100%"),
-      p(
-        "
-          This UMAP displays the seven assigned cell types of all cells in our
-          dataset. Cell color indicates cell type, following the colors in the
-          figure legend.
-        "
-      )
+      uiOutput("cell_types_image")
     )
   ),
   shinyjs::hidden(

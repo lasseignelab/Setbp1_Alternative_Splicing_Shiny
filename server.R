@@ -60,6 +60,19 @@ server <- function(input, output, session) {
     )
   })
 
+  output$cell_types_image <- renderUI({
+    tagList(
+      img(src = paste0(input$expression_tissue, "_cell_types.png"), width = "100%"),
+      p(
+        "
+          This UMAP displays the assigned cell types of all cells in our
+          dataset. Cell color indicates cell type, following the colors in the
+          figure legend.
+        "
+      )
+    )
+  })
+
   output$as_gene_summary_image <- renderUI({
     as_summary_gene_selected <- input$as_summary_gene != ""
     if (as_summary_gene_selected) {
