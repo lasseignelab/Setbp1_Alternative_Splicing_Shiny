@@ -34,7 +34,8 @@ server <- function(input, output, session) {
     gh(
       paste0(
         "/repos/lasseignelab/230926_EJ_Setbp1_AlternativeSplicing",
-        "/contents/results/as_gene_summaries/"
+        "/contents/results/as_gene_summaries/",
+        input$as_summary_tissue
       )
     )
   })
