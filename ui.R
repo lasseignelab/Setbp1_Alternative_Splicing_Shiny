@@ -45,7 +45,7 @@ welcome_about <- tabPanel(
     HTML(glue("
       Welcome to the {shiny_link} application created by Anthony Crumley in
       the {lasseigne_link} to visualize gene expression and splice junction
-      usage in the {mouse_gene} mouse brain!
+      usage in the {mouse_gene} mouse brain and kidney!
     "))
   ),
   p(
@@ -225,8 +225,8 @@ as_gene_summary <- tabPanel(
     between {mouse_gene} and controls. We detected 34 genes with significant
     changes in SJU (permutation test, p < 0.05 and delta > 1). To explore the
     transcript structures, splice junction expression, and splice junction usage
-    of these 34 significant SJU genes, please select a gene here! For more
-    information, please refer to our manuscript ({jones_paper_link}).
+    of these 34 significant SJU genes, please select a tissue and gene here! For
+    more information, please refer to our manuscript ({jones_paper_link}).
   "))),
   selectizeInput(
     "as_summary_tissue",

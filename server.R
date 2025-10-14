@@ -254,8 +254,8 @@ server <- function(input, output, session) {
     tagList(
       HTML(glue("
         This UMAP displays the normalized and scaled gene expression values for
-        {gene} in wild-type mouse cerebral cortex tissue cells. A brighter color
-        indicates a higher expression level.
+        {gene} in wild-type mouse {input$expression_tissue} tissue cells. A
+        brighter color indicates a higher expression level.
       ")),
       downloadLink(
         "wildtype_gene_expression_download",
@@ -299,8 +299,8 @@ server <- function(input, output, session) {
     tagList(
       HTML(glue("
       This UMAP displays the normalized and scaled gene expression values for
-      {gene} in {mouse_gene} mouse cerebral cortex tissue cells. A brighter
-      color indicates a higher expression level.
+      {gene} in {mouse_gene} mouse {input$expression_tissue} tissue cells. A
+      brighter color indicates a higher expression level.
       ")),
       downloadLink(
         "mutant_gene_expression_download",
@@ -344,11 +344,12 @@ server <- function(input, output, session) {
     tagList(
       HTML(glue("
         This UMAP displays the splice junction usage (SJU) values for splice
-        junction {splice_junction} from {gene} in wild-type mouse cerebral
-        cortex tissue cells. A brighter color indicates a higher usage level.
-        Please note that our manuscript does not use SJU values per cell, and
-        SJU is a single number calculated for an entire population of cells,
-        such as patient variant cells of a specific cell type.
+        junction {splice_junction} from {gene} in wild-type mouse
+        {input$expression_tissue} tissue cells. A brighter color indicates a
+        higher usage level.  Please note that our manuscript does not use SJU
+        values per cell, and SJU is a single number calculated for an entire
+        population of cells, such as patient variant cells of a specific cell
+        type.
       ")),
       downloadLink(
         "wildtype_splice_junction_download",
@@ -393,11 +394,12 @@ server <- function(input, output, session) {
     tagList(
       HTML(glue("
         This UMAP displays the splice junction usage (SJU) values for splice
-        junction {splice_junction} from {gene} in {mouse_gene} mouse cerebral
-        cortex tissue cells. A brighter color indicates a higher usage level.
-        Please note that our manuscript does not use SJU values per cell, and
-        SJU is a single number calculated for an entire population of cells,
-        such as patient variant cells of a specific cell type.
+        junction {splice_junction} from {gene} in {mouse_gene} mouse
+        {input$expression_tissue} tissue cells. A brighter color indicates a
+        higher usage level.  Please note that our manuscript does not use SJU
+        values per cell, and SJU is a single number calculated for an entire
+        population of cells, such as patient variant cells of a specific cell
+        type.
       ")),
       downloadLink(
         "mutant_splice_junction_download",
