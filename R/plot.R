@@ -5,7 +5,7 @@
 # shinyapps.io memory limit.
 #
 # The data transformation from data.R needs to be ran first to generate the
-# setbp1_marvel_aligned_sans_gtf.rds file this script uses.
+# *_sans_gtf.rds files this script uses.
 #
 # Example usage in R console:
 #   > source("R/plot.R")
@@ -43,7 +43,26 @@ prerender_cell_type_plot <- function(tissue, data) {
     point_size_legend = 7
     legend_text_size = 11
   } else {
-    cell_type_colors <- grDevices::rainbow(length(cell_group_list))
+    cell_type_colors <- c(
+      `Proximal tubule cells` = "#F8766D",
+      `Thick ascending limb (LOH)` = "#AA937E",
+      `PCT` = "#A85A5A",
+      `Endothelial cells` = "#CF9400",
+      `PST` = "#948802",
+      `CDPC` = "#F03F00",
+      `DCT` = "#6D0404",
+      `Mesenchymal cells` = "#FFC8C4",
+      `Thin ascending limb (LOH)` = "#AA6320",
+      `CDIC-B` = "#EEDF37",
+      `Dendritic cells` = "#C70F0F",
+      `Thin descending limb (LOH)` = "#FFE196",
+      `CDIC-A` = "#4E3801",
+      `Podocytes` = "#BD085E",
+      `B cells` = "#FFBE1D",
+      `T regulatory cells` = "#00B0F6",
+      `T cells` = "#FF7600",
+      `Connecting tubule cells` = "#E76BF3"
+    )
     point_size_legend = 3
     legend_text_size = 7
   }
