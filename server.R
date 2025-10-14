@@ -242,6 +242,7 @@ server <- function(input, output, session) {
         image_file <- gene_expression_plot_image(
           paste0(input_file_base(), "_wildtype_gene.rds"),
           "Wild-type",
+          input$expression_tissue,
           gene()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -272,6 +273,7 @@ server <- function(input, output, session) {
       image_file <- gene_expression_plot_image(
         paste0(input_file_base(), "_wildtype_gene.rds"),
         "Wild-type",
+        input$expression_tissue,
         gene()
       )
       file.copy(image_file, file)
@@ -286,6 +288,7 @@ server <- function(input, output, session) {
         image_file <- gene_expression_plot_image(
           paste0(input_file_base(), "_mutant_gene.rds"),
           "<i>Setbp1</i><sup>S858R</sup>",
+          input$expression_tissue,
           gene()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -317,6 +320,7 @@ server <- function(input, output, session) {
       image_file <- gene_expression_plot_image(
         paste0(input_file_base(), "_mutant_gene.rds"),
         "<i>Setbp1</i><sup>S858R</sup>",
+        input$expression_tissue,
         gene()
       )
       file.copy(image_file, file)
@@ -331,6 +335,7 @@ server <- function(input, output, session) {
         image_file <- splice_junction_plot_image(
           paste0(input_file_base(), "_wildtype_sj.rds"),
           "Wild-type",
+          input$expression_tissue,
           splice_junction()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -366,6 +371,7 @@ server <- function(input, output, session) {
       image_file <- splice_junction_plot_image(
         paste0(input_file_base(), "_wildtype_sj.rds"),
         "Wild-type",
+        input$expression_tissue,
         splice_junction()
       )
       file.copy(image_file, file)
@@ -380,6 +386,7 @@ server <- function(input, output, session) {
         image_file <- splice_junction_plot_image(
           paste0(input_file_base(), "_mutant_sj.rds"),
           "<i>Setbp1</i><sup>S858R</sup>",
+          input$expression_tissue,
           splice_junction()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -416,6 +423,7 @@ server <- function(input, output, session) {
       image_file <- splice_junction_plot_image(
         paste0(input_file_base(), "_mutant_sj.rds"),
         "<i>Setbp1</i><sup>S858R</sup>",
+        input$expression_tissue,
         splice_junction()
       )
       file.copy(image_file, file)
