@@ -3,9 +3,10 @@
 # into smaller files specific to the plots being generated.  This transformation
 # was needed to overcome shinyapps.io limitations on disk space and memory.
 #
-# To run the data transformation, download the source file from
-# "EmmaJones/240227_MARVEL_DATA/setbp1_marvel_aligned.rds" in the lasseigne_lab
-# folder on Cheaha into the "original_data" folder in the project.
+# To run the data transformation, download the source files from the
+# "/data/project/lasseigne_lab/DATASET_dir/setbp1_as_shiny/september2025"
+# folder on Cheaha into the "original_data" folder in the project.  There
+# are separate files for brain and kidney that will each need to be processed.
 #
 # Example usage in R console:
 #   > source("R/data.R")
