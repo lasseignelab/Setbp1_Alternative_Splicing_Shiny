@@ -222,11 +222,12 @@ as_gene_summary <- tabPanel(
   p(HTML(glue("
     To determine significant changes in SJ usage (SJU), we performed a
     permutation analysis using the {marvel_link} R package for each cell type
-    between {mouse_gene} and controls. We detected 34 genes with significant
-    changes in SJU (permutation test, p < 0.05 and delta > 1). To explore the
-    transcript structures, splice junction expression, and splice junction usage
-    of these 34 significant SJU genes, please select a gene here! For more
-    information, please refer to our manuscript ({setbp1_paper_link}).
+    between {mouse_gene} and wild-type mice. We detected 33 and 62 genes with
+    significant changes in SJU (permutation test, p < 0.05 and delta > 1) in the
+    cerebral cortex and the kidney, respectively. To explore the transcript
+    structures, splice junction expression, and splice junction usage of the
+    significant SJU genes, please select a gene here! For more information,
+    please refer to our manuscript ({setbp1_paper_link}).
   "))),
   selectizeInput(
     "as_summary_gene",
