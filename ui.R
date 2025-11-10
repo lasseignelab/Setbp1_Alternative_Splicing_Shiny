@@ -14,8 +14,8 @@ shiny_link <- external_link("https://shiny.posit.co/", "Shiny")
 marvel_link <- external_link("https://github.com/wenweixiong/MARVEL", "MARVEL")
 lasseigne_link <- external_link("https://www.lasseigne.org/", "Lasseigne Lab")
 jones_paper_link <- external_link(
-  "https://www.biorxiv.org/content/10.1101/2024.06.26.600823v1",
-  "Jones et al., 2024"
+  "https://doi.org/10.1101/2024.06.26.600823",
+  "Soelter & Jones et al., 2025"
 )
 whitlock_paper_link <- external_link(
   "https://doi.org/10.1111/jcmm.18001",
