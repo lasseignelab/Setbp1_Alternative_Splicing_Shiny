@@ -13,7 +13,7 @@ hrnpa2b1_gene <- em("Hnrnpa2b1")
 shiny_link <- external_link("https://shiny.posit.co/", "Shiny")
 marvel_link <- external_link("https://github.com/wenweixiong/MARVEL", "MARVEL")
 lasseigne_link <- external_link("https://www.lasseigne.org/", "Lasseigne Lab")
-jones_paper_link <- external_link(
+setbp1_paper_link <- external_link(
   "https://doi.org/10.1101/2024.06.26.600823",
   "Soelter & Jones et al., 2025"
 )
@@ -53,7 +53,7 @@ welcome_about <- tabPanel(
       This application accompanies our manuscript, 'Cell-type-specific
       alternative splicing in the cerebral cortex and kidney of a {mouse_gene}
       Schinzel-Giedion Syndrome patient variant mouse', which is available on
-      bioRxiv ({jones_paper_link}). In our manuscript, we quantified gene and
+      bioRxiv ({setbp1_paper_link}). In our manuscript, we quantified gene and
       splice junction (SJ) expression for 51,318 cerebral cortex and 75,889
       kidney nuclei, previously generated from atypical {mouse_gene} SGS patient
       variant (n = 3) and wild-type (n = 3) mice ({whitlock_paper_link}). After
@@ -226,7 +226,7 @@ as_gene_summary <- tabPanel(
     changes in SJU (permutation test, p < 0.05 and delta > 1). To explore the
     transcript structures, splice junction expression, and splice junction usage
     of these 34 significant SJU genes, please select a gene here! For more
-    information, please refer to our manuscript ({jones_paper_link}).
+    information, please refer to our manuscript ({setbp1_paper_link}).
   "))),
   selectizeInput(
     "as_summary_gene",
@@ -350,7 +350,7 @@ faq <- tabPanel(
     tags$dd(
       tags$ul(
         tags$li(HTML(glue("
-          Please cite our bioRxiv manuscript ({jones_paper_link}).
+          Please cite our bioRxiv manuscript ({setbp1_paper_link}).
         ")))
       )
     )
