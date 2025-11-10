@@ -74,15 +74,15 @@ welcome_about <- tabPanel(
   p(
     strong("Graphical Abstract."),
     HTML(glue("
-      (A) Schematic overview of our processing and analysis
-      pipeline. (B) We analyzed pseudobulk gene expression and calculated SJU
-      for each cell type and condition. (C) We compared SJU values for each cell
-      type using a permutation test to identify cell-type-specific differences
-      in AS between {mouse_gene} and wild-type mouse brain tissue. (D) Next, we
-      visualized all annotated transcripts and splice junction locations for
-      each significant SJU gene. (E) Finally, we compared the genes and pathways
-      identified through functional enrichment analysis that overlap between
-      cell types and predict their biological relevance.
+      (A) Schematic overview of our processing and analysis pipeline. (B) We
+      analyzed pseudobulk gene expression and calculated SJU for each cell type
+      and condition. (C) We compared SJU values for each cell type using a
+      permutation test to identify cell-type-specific differences in AS between
+      {mouse_gene} and wild-type mouse tissues. (D) Next, we visualized all
+      annotated transcripts and splice junction locations for each significant
+      SJU gene. (E) Finally, we compared the genes with significant SJU between
+      cell types and annotated their functions and disease associations to
+      predict their biological relevance.
     "))
   )
 )
