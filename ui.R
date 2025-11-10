@@ -7,7 +7,7 @@ library(glue)
 mouse <- paste0("C57BL/6JSetbp1", tags$sup("em2Lutzy"), "/J")
 mouse_gene <- paste0(em("Setbp1"), tags$sup("S858R"))
 human_gene <- em("SETBP1")
-son_gene <- em("Son")
+hrnpa2b1_gene <- em("Hnrnpa2b1")
 
 # External links used throughout the app for references.
 shiny_link <- external_link("https://shiny.posit.co/", "Shiny")
@@ -45,28 +45,29 @@ welcome_about <- tabPanel(
     HTML(glue("
       Welcome to the {shiny_link} application created by Anthony Crumley in
       the {lasseigne_link} to visualize gene expression and splice junction
-      usage in the {mouse_gene} mouse brain!
+      usage in the {mouse_gene} mouse brain and kidney!
     "))
   ),
   p(
     HTML(glue("
-      This application accompanies our manuscript, Cell-type-specific
-      alternative splicing in the cerebral cortex of a Schinzel-Giedion Syndrome
-      patient variant mouse model, which is available on bioRxiv
-      ({jones_paper_link}). In our manuscript, we quantified gene and splice
-      junction (SJ) expression for 51,465 nuclei previously generated
-      ({whitlock_paper_link}) from the cerebral cortex of atypical {mouse_gene}
-      SGS patient variant mice (n = 3) and wild-type control mice (n = 3).
-      After cell type annotation, we performed pseudobulk differential gene
-      expression and SJ usage (SJU) analyses across cell types and conditions.
-      We identified 34 genes with statistically significant alterations in SJU.
-      Oligodendrocytes had the most genes with changes in SJU, followed by
-      astrocytes, excitatory, and inhibitory neurons. One gene, {son_gene}, a
-      splicing cofactor known to cause the neurodevelopmental disorder ZTTK
-      Syndrome, had SJU changes in all six non-vascular cell types we measured
-      in {mouse_gene} compared to controls. This is the first research to report
-      cell-type-specific AS changes in the cerebral cortex of an SGS model and
-      the first study to link SGS to perturbations in {son_gene}.
+      This application accompanies our manuscript, 'Cell-type-specific
+      alternative splicing in the cerebral cortex and kidney of a {mouse_gene}
+      Schinzel-Giedion Syndrome patient variant mouse', which is available on
+      bioRxiv ({jones_paper_link}). In our manuscript, we quantified gene and
+      splice junction (SJ) expression for 51,318 cerebral cortex and 75,889
+      kidney nuclei, previously generated from atypical {mouse_gene} SGS patient
+      variant (n = 3) and wild-type (n = 3) mice ({whitlock_paper_link}). After
+      cell type annotation, we performed pseudobulk differential gene expression
+      and SJ usage (SJU) analyses across cell types and conditions. We
+      identified 33 and 62 genes with statistically significant alterations in
+      SJU in the cerebral cortex and the kidney, respectively. In concordance
+      with previous work in human peripheral blood from an SGS patient, we
+      identified significant SJU in a member of the heterogeneous nuclear
+      ribonucleoprotein family. {hrnpa2b1_gene} was cell-type-specific for
+      inhibitory neurons in the cerebral cortex and cell-type-agnostic in the
+      kidney, suggesting tissue-specificity of AS in {mouse_gene} mice. This is
+      the first research to report cell-type-specific AS changes in the cerebral
+      cortex and the kidney of an SGS model.
     "))
   ),
   img(src = "setbp1.png", width = "100%", height = "auto"),
