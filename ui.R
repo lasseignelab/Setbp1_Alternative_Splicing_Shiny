@@ -60,14 +60,15 @@ welcome_about <- tabPanel(
       cell type annotation, we performed pseudobulk differential gene expression
       and SJ usage (SJU) analyses across cell types and conditions. We
       identified 33 and 62 genes with statistically significant alterations in
-      SJU in the cerebral cortex and the kidney, respectively. In concordance
-      with previous work in human peripheral blood from an SGS patient, we
-      identified significant SJU in a member of the heterogeneous nuclear
-      ribonucleoprotein family. {hrnpa2b1_gene} was cell-type-specific for
-      inhibitory neurons in the cerebral cortex and cell-type-agnostic in the
-      kidney, suggesting tissue-specificity of AS in {mouse_gene} mice. This is
-      the first research to report cell-type-specific AS changes in the cerebral
-      cortex and the kidney of an SGS model.
+      SJU in the cerebral cortex and the kidney, respectively. Similar to
+      previous work in human peripheral blood from an SGS patient that identified
+      AS in a member of the heterogeneous nuclear ribonucleoprotein family, we
+      identified significant SJU in {hrnpa2b1_gene}, another heterogeneous nuclear
+      ribonucleoprotein. {hrnpa2b1_gene} was cell-type-specific for inhibitory
+      neurons in the cerebral cortex and cell-type-agnostic in the kidney,
+      suggesting tissue-specificity of AS in {mouse_gene} mice. This is the first
+      research to report cell-type-specific AS changes in the cerebral cortex and
+      the kidney of an SGS model.
     "))
   ),
   img(src = "setbp1.png", width = "100%", height = "auto"),
@@ -366,7 +367,7 @@ faq <- tabPanel(
         "),
         tags$li("
           For questions about our manuscript, please contact
-          tsoelter(at)uab(dot)edu, emma(dot)f(dot)jones(at)wustl(dot)edu or
+          tsoelter(at)uab(dot)edu, emma(dot)f(dot)jones(at)wustl(dot)edu, or
           bnp0001(at)uab(dot)edu
         ")
       )
