@@ -276,10 +276,10 @@ faq <- tabPanel(
     tags$dd(
       tags$ul(
         tags$li(HTML(glue("
-          We obtained right cerebral cortex hemispheres from three 6-week-old
-          male {mouse} mice heterozygous for {mouse_gene}, an SGS-associated
-          point mutation (JAX Stock #033235) and three wild-type (WT) age, and
-          sex-matched C57BL6/J mice (JAX Stock #000664)
+          We obtained right cerebral cortex hemispheres and whole kidneys from
+          three 6-week-old male {mouse} mice heterozygous for {mouse_gene}, an
+          SGS-associated point mutation (JAX Stock #033235) and three wild-type
+          (WT) age, and sex-matched C57BL6/J mice (JAX Stock #000664)
         "))),
         tags$li(HTML(glue("
           Our original manuscript, {whitlock_paper_link}, includes details on
@@ -366,7 +366,8 @@ faq <- tabPanel(
         "),
         tags$li("
           For questions about our manuscript, please contact
-          efjones(at)uab(dot)edu or bnp0001(at)uab(dot)edu
+          tsoelter(at)uab(dot)edu, emma(dot)f(dot)jones(at)wustl(dot)edu or
+          bnp0001(at)uab(dot)edu
         ")
       )
     )
