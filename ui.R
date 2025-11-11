@@ -7,15 +7,15 @@ library(glue)
 mouse <- paste0("C57BL/6JSetbp1", tags$sup("em2Lutzy"), "/J")
 mouse_gene <- paste0(em("Setbp1"), tags$sup("S858R"))
 human_gene <- em("SETBP1")
-son_gene <- em("Son")
+hrnpa2b1_gene <- em("Hnrnpa2b1")
 
 # External links used throughout the app for references.
 shiny_link <- external_link("https://shiny.posit.co/", "Shiny")
 marvel_link <- external_link("https://github.com/wenweixiong/MARVEL", "MARVEL")
 lasseigne_link <- external_link("https://www.lasseigne.org/", "Lasseigne Lab")
-jones_paper_link <- external_link(
-  "https://www.biorxiv.org/content/10.1101/2024.06.26.600823v1",
-  "Jones et al., 2024"
+setbp1_paper_link <- external_link(
+  "https://doi.org/10.1101/2024.06.26.600823",
+  "Soelter & Jones et al., 2025"
 )
 whitlock_paper_link <- external_link(
   "https://doi.org/10.1111/jcmm.18001",
@@ -50,38 +50,40 @@ welcome_about <- tabPanel(
   ),
   p(
     HTML(glue("
-      This application accompanies our manuscript, Cell-type-specific
-      alternative splicing in the cerebral cortex of a Schinzel-Giedion Syndrome
-      patient variant mouse model, which is available on bioRxiv
-      ({jones_paper_link}). In our manuscript, we quantified gene and splice
-      junction (SJ) expression for 51,465 nuclei previously generated
-      ({whitlock_paper_link}) from the cerebral cortex of atypical {mouse_gene}
-      SGS patient variant mice (n = 3) and wild-type control mice (n = 3).
-      After cell type annotation, we performed pseudobulk differential gene
-      expression and SJ usage (SJU) analyses across cell types and conditions.
-      We identified 34 genes with statistically significant alterations in SJU.
-      Oligodendrocytes had the most genes with changes in SJU, followed by
-      astrocytes, excitatory, and inhibitory neurons. One gene, {son_gene}, a
-      splicing cofactor known to cause the neurodevelopmental disorder ZTTK
-      Syndrome, had SJU changes in all six non-vascular cell types we measured
-      in {mouse_gene} compared to controls. This is the first research to report
-      cell-type-specific AS changes in the cerebral cortex of an SGS model and
-      the first study to link SGS to perturbations in {son_gene}.
+      This application accompanies our manuscript, 'Cell-type-specific
+      alternative splicing in the cerebral cortex and kidney of a {mouse_gene}
+      Schinzel-Giedion Syndrome patient variant mouse', which is available on
+      bioRxiv ({setbp1_paper_link}). In our manuscript, we quantified gene and
+      splice junction (SJ) expression for 51,318 cerebral cortex and 75,889
+      kidney nuclei, previously generated from atypical {mouse_gene} SGS patient
+      variant (n = 3) and wild-type (n = 3) mice ({whitlock_paper_link}). After
+      cell type annotation, we performed pseudobulk differential gene expression
+      and SJ usage (SJU) analyses across cell types and conditions. We
+      identified 33 and 62 genes with statistically significant alterations in
+      SJU in the cerebral cortex and the kidney, respectively. Similar to
+      previous work in human peripheral blood from an SGS patient that identified
+      AS in a member of the heterogeneous nuclear ribonucleoprotein family, we
+      identified significant SJU in {hrnpa2b1_gene}, another heterogeneous nuclear
+      ribonucleoprotein. {hrnpa2b1_gene} was cell-type-specific for inhibitory
+      neurons in the cerebral cortex and cell-type-agnostic in the kidney,
+      suggesting tissue-specificity of AS in {mouse_gene} mice. This is the first
+      research to report cell-type-specific AS changes in the cerebral cortex and
+      the kidney of an SGS model.
     "))
   ),
   img(src = "setbp1.png", width = "100%", height = "auto"),
   p(
     strong("Graphical Abstract."),
     HTML(glue("
-      (A) Schematic overview of our processing and analysis
-      pipeline. (B) We analyzed pseudobulk gene expression and calculated SJU
-      for each cell type and condition. (C) We compared SJU values for each cell
-      type using a permutation test to identify cell-type-specific differences
-      in AS between {mouse_gene} and wild-type mouse brain tissue. (D) Next, we
-      visualized all annotated transcripts and splice junction locations for
-      each significant SJU gene. (E) Finally, we compared the genes and pathways
-      identified through functional enrichment analysis that overlap between
-      cell types and predict their biological relevance.
+      (A) Schematic overview of our processing and analysis pipeline. (B) We
+      analyzed pseudobulk gene expression and calculated SJU for each cell type
+      and condition. (C) We compared SJU values for each cell type using a
+      permutation test to identify cell-type-specific differences in AS between
+      {mouse_gene} and wild-type mouse tissues. (D) Next, we visualized all
+      annotated transcripts and splice junction locations for each significant
+      SJU gene. (E) Finally, we compared the genes with significant SJU between
+      cell types and annotated their functions and disease associations to
+      predict their biological relevance.
     "))
   )
 )
@@ -222,11 +224,12 @@ as_gene_summary <- tabPanel(
   p(HTML(glue("
     To determine significant changes in SJ usage (SJU), we performed a
     permutation analysis using the {marvel_link} R package for each cell type
-    between {mouse_gene} and controls. We detected 34 genes with significant
-    changes in SJU (permutation test, p < 0.05 and delta > 1). To explore the
-    transcript structures, splice junction expression, and splice junction usage
-    of these 34 significant SJU genes, please select a tissue and gene here! For
-    more information, please refer to our manuscript ({jones_paper_link}).
+    between {mouse_gene} and wild-type mice. We detected 33 and 62 genes with
+    significant changes in SJU (permutation test, p < 0.05 and delta > 1) in the
+    cerebral cortex and the kidney, respectively. To explore the transcript
+    structures, splice junction expression, and splice junction usage of the
+    significant SJU genes, please select a tissue and a gene here! For more
+    information, please refer to our manuscript ({setbp1_paper_link}).
   "))),
   selectizeInput(
     "as_summary_tissue",
@@ -283,10 +286,10 @@ faq <- tabPanel(
     tags$dd(
       tags$ul(
         tags$li(HTML(glue("
-          We obtained right cerebral cortex hemispheres from three 6-week-old
-          male {mouse} mice heterozygous for {mouse_gene}, an SGS-associated
-          point mutation (JAX Stock #033235) and three wild-type (WT) age, and
-          sex-matched C57BL6/J mice (JAX Stock #000664)
+          We obtained right cerebral cortex hemispheres and whole kidneys from
+          three 6-week-old male {mouse} mice heterozygous for {mouse_gene}, an
+          SGS-associated point mutation (JAX Stock #033235) and three wild-type
+          (WT) age, and sex-matched C57BL6/J mice (JAX Stock #000664)
         "))),
         tags$li(HTML(glue("
           Our original manuscript, {whitlock_paper_link}, includes details on
@@ -358,7 +361,7 @@ faq <- tabPanel(
     tags$dd(
       tags$ul(
         tags$li(HTML(glue("
-          Please cite our bioRxiv manuscript ({jones_paper_link}).
+          Please cite our bioRxiv manuscript ({setbp1_paper_link}).
         ")))
       )
     )
@@ -373,7 +376,8 @@ faq <- tabPanel(
         "),
         tags$li("
           For questions about our manuscript, please contact
-          efjones(at)uab(dot)edu or bnp0001(at)uab(dot)edu
+          tsoelter(at)uab(dot)edu, emma(dot)f(dot)jones(at)wustl(dot)edu, or
+          bnp0001(at)uab(dot)edu
         ")
       )
     )
