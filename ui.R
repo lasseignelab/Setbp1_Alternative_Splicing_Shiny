@@ -97,13 +97,21 @@ plots <- tabPanel(
   sidebarLayout(
     sidebarPanel(
       selectizeInput(
+        "expression_tissue",
+        "Tissue",
+        choices = c("Brain" = "brain", "Kidney" = "kidney"),
+        options = list(
+          maxItems = 1
+        )
+      ),
+      selectizeInput(
         "gene",
         "Gene",
         choices = NULL,
         options = list(
           maxOptions = 20,
           maxItems = 1,
-          placeholder = "Loading..."
+          placeholder = "Enter gene name to search"
         )
       ),
       helpText("Search for a gene to plot gene expression."),
@@ -146,14 +154,7 @@ plots <- tabPanel(
     ),
 
     mainPanel(
-      img(src = "cell_types.png", width = "100%"),
-      p(
-        "
-          This UMAP displays the seven assigned cell types of all cells in our
-          dataset. Cell color indicates cell type, following the colors in the
-          figure legend.
-        "
-      )
+      uiOutput("cell_types_image")
     )
   ),
   shinyjs::hidden(
@@ -227,9 +228,17 @@ as_gene_summary <- tabPanel(
     significant changes in SJU (permutation test, p < 0.05 and delta > 1) in the
     cerebral cortex and the kidney, respectively. To explore the transcript
     structures, splice junction expression, and splice junction usage of the
-    significant SJU genes, please select a gene here! For more information,
-    please refer to our manuscript ({setbp1_paper_link}).
+    significant SJU genes, please select a tissue and a gene here! For more
+    information, please refer to our manuscript ({setbp1_paper_link}).
   "))),
+  selectizeInput(
+    "as_summary_tissue",
+    "Tissue",
+    choices = c("Brain" = "brain", "Kidney" = "kidney"),
+    options = list(
+      maxItems = 1
+    )
+  ),
   selectizeInput(
     "as_summary_gene",
     "Gene",

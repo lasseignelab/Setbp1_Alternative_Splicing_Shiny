@@ -3,13 +3,14 @@
 # into smaller files specific to the plots being generated.  This transformation
 # was needed to overcome shinyapps.io limitations on disk space and memory.
 #
-# To run the data transformation, download the source file from
-# "EmmaJones/240227_MARVEL_DATA/setbp1_marvel_aligned.rds" in the lasseigne_lab
-# folder on Cheaha into the "original_data" folder in the project.
+# To run the data transformation, download the source files from the
+# "/data/project/lasseigne_lab/DATASET_dir/setbp1_as_shiny/september2025"
+# folder on Cheaha into the "original_data" folder in the project.  There
+# are separate files for brain and kidney that will each need to be processed.
 #
 # Example usage in R console:
 #   > source("R/data.R")
-#   > prepare_data("original_data/setbp1_marvel_aligned.rds")
+#   > prepare_data("brain", "original_data/setbp1_marvel_aligned.rds")
 #
 ################################################################################
 
@@ -18,18 +19,18 @@ library(plyr)
 library(ggplot2)
 library(Matrix)
 
-metadata <- function(setbp1) {
+metadata <- function(setbp1, output_file_base) {
   data <- setbp1
   data$sample.metadata <- NULL
   data$pca <- NULL
   data$gene.norm.matrix <- NULL
   data$gene.count.matrix <- NULL
   data$sj.count.matrix <- NULL
-  saveRDS(data, file = "data/setbp1_marvel_aligned_metadata.rds")
+  saveRDS(data, file = paste0(output_file_base, "_metadata.rds"))
 
 }
 
-wildtype_setbp1 <- function(setbp1) {
+wildtype_setbp1 <- function(setbp1, output_file_base) {
   data <- setbp1
   data$sample.metadata <- data$sample.metadata %>%
     filter(seq_folder == "wildtype")
@@ -45,17 +46,17 @@ wildtype_setbp1 <- function(setbp1) {
   gene_data$sj.count.matrix <- NULL
   gene_data$gene.count.matrix <- NULL
   gene_data$sj.metadata <- NULL
-  saveRDS(gene_data, file = "data/setbp1_marvel_aligned_wildtype_gene.rds")
+  saveRDS(gene_data, file = paste0(output_file_base, "_wildtype_gene.rds"))
 
   splice_junction_data <- data
   splice_junction_data$gene.norm.matrix <- NULL
   saveRDS(
     splice_junction_data,
-    file = "data/setbp1_marvel_aligned_wildtype_sj.rds"
+    file = paste0(output_file_base, "_wildtype_sj.rds")
   )
 }
 
-mutant_setbp1 <- function(setbp1) {
+mutant_setbp1 <- function(setbp1, output_file_base) {
   data <- setbp1
   data$sample.metadata <- data$sample.metadata %>%
     filter(seq_folder == "mutant")
@@ -71,17 +72,17 @@ mutant_setbp1 <- function(setbp1) {
   gene_data$sj.count.matrix <- NULL
   gene_data$gene.count.matrix <- NULL
   gene_data$sj.metadata <- NULL
-  saveRDS(gene_data, file = "data/setbp1_marvel_aligned_mutant_gene.rds")
+  saveRDS(gene_data, file = paste0(output_file_base, "_mutant_gene.rds"))
 
   splice_junction_data <- data
   splice_junction_data$gene.norm.matrix <- NULL
   saveRDS(
     splice_junction_data,
-    file = "data/setbp1_marvel_aligned_mutant_sj.rds"
+    file = paste0(output_file_base, "_mutant_sj.rds")
   )
 }
 
-prepare_data <- function(filename) {
+prepare_data <- function(tissue, filename) {
   message("*** Loading MARVEL data file.")
   setbp1 <- readRDS(filename)
 
@@ -90,11 +91,13 @@ prepare_data <- function(filename) {
   message("*** Saving MARVEL data sans gtf for cell type plot rendering.")
   saveRDS(
     setbp1,
-    file = paste0(dirname(filename), "/setbp1_marvel_aligned_sans_gtf.rds")
+    file = paste0(dirname(filename), "/", tools::file_path_sans_ext(basename(filename)), "_sans_gtf.rds")
   )
 
+  output_file_base <- paste0("data/setbp1_", tissue, "_marvel_aligned")
+
   message("*** Saving metadata file.")
-  metadata(setbp1)
+  metadata(setbp1, output_file_base)
 
   message("*** Removing unused metadata.")
   setbp1$sj.metadata$gene_short_name.end <- NULL
@@ -102,9 +105,9 @@ prepare_data <- function(filename) {
   setbp1$gene.metadata <- NULL
 
   message("*** Creating wild-type files.")
-  wildtype_setbp1(setbp1)
+  wildtype_setbp1(setbp1, output_file_base)
   message("*** Creating mutant files.")
-  mutant_setbp1(setbp1)
+  mutant_setbp1(setbp1, output_file_base)
 
   message("*** Done.")
 }

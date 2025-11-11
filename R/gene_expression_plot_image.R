@@ -7,11 +7,12 @@
 #
 # @param data_file Name of the file to create the plot from.
 # @param data_name Name of the data to put in the plot title, i.e. Wildtype
-# @param gene Gene name of filter the data for the plot.
+# @param tissue Tissue name for the data to plot.
+# @param gene Gene name to filter the data for the plot.
 # @return The name of the image file generated.
 ################################################################################
 
-gene_expression_plot_image <- function(data_file, data_name, gene) {
+gene_expression_plot_image <- function(data_file, data_name, tissue, gene) {
   gc()
   setbp1 <- readRDS(data_file)
   plot <- PlotValues.PCA.Gene.10x(
@@ -23,8 +24,9 @@ gene_expression_plot_image <- function(data_file, data_name, gene) {
   )
   setbp1 <- NULL
 
+  title_tissue <- toTitleCase(tissue)
   plot <- plot +
-    labs(title = glue("{data_name} Gene Expression for {gene}")) +
+    labs(title = glue("{data_name} {title_tissue} Gene Expression for {gene}")) +
     ggplot_theme()
 
   outfile <- tempfile(fileext = ".png")
