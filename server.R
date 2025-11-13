@@ -19,7 +19,7 @@ server <- function(input, output, session) {
   # Load MARVEL data and split into wildtype and mutant for separate plotting.
   # ****************************************************************************
   setbp1_metadata <- reactive({
-    readRDS("./data/setbp1_brain_marvel_aligned_metadata.rds")
+    readRDS(paste0(input_file_base(), "_metadata.rds"))
   })
 
   input_file_base <- reactive({
