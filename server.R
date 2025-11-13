@@ -122,7 +122,12 @@ server <- function(input, output, session) {
     c(c(""), splice_junctions$coord.intron %>% sort())
   })
 
-  observe({
+  observeEvent(input$expression_tissue, {
+    shinyjs::hide("genome_browsers")
+    shinyjs::hide("splice_junction_input")
+    shinyjs::hide("gene_expression_plots")
+    shinyjs::hide("splice_junction_plots")
+
     updateSelectizeInput(
       session,
       "gene",
@@ -130,6 +135,7 @@ server <- function(input, output, session) {
       options = list(
         placeholder = "Enter gene name to search"
       ),
+      selected = NULL,
       server = TRUE
     )
   })
@@ -238,11 +244,13 @@ server <- function(input, output, session) {
   output$wildtype_gene_expression_plot <- renderImage(
     {
       gene_selected <- gene() != ""
+      expression_tissue <- isolate(input$expression_tissue)
       if (gene_selected) {
+        input_file_base <- isolate(input_file_base())
         image_file <- gene_expression_plot_image(
-          paste0(input_file_base(), "_wildtype_gene.rds"),
+          paste0(input_file_base, "_wildtype_gene.rds"),
           "Wild-type",
-          input$expression_tissue,
+          expression_tissue,
           gene()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -252,10 +260,11 @@ server <- function(input, output, session) {
 
   output$wildtype_gene_expression_legend <- renderUI({
     gene <- em(gene())
+    expression_tissue <- isolate(input$expression_tissue)
     tagList(
       HTML(glue("
         This UMAP displays the normalized and scaled gene expression values for
-        {gene} in wild-type mouse {input$expression_tissue} tissue cells. A
+        {gene} in wild-type mouse {expression_tissue} tissue cells. A
         brighter color indicates a higher expression level.
       ")),
       downloadLink(
@@ -270,10 +279,11 @@ server <- function(input, output, session) {
       "plot.png"
     },
     content = function(file) {
+      expression_tissue <- isolate(input$expression_tissue)
       image_file <- gene_expression_plot_image(
         paste0(input_file_base(), "_wildtype_gene.rds"),
         "Wild-type",
-        input$expression_tissue,
+        expression_tissue,
         gene()
       )
       file.copy(image_file, file)
@@ -284,11 +294,13 @@ server <- function(input, output, session) {
   output$mutant_gene_expression_plot <- renderImage(
     {
       gene_selected <- gene() != ""
+      expression_tissue <- isolate(input$expression_tissue)
       if (gene_selected) {
+        input_file_base <- isolate(input_file_base())
         image_file <- gene_expression_plot_image(
-          paste0(input_file_base(), "_mutant_gene.rds"),
+          paste0(input_file_base, "_mutant_gene.rds"),
           "<i>Setbp1</i><sup>S858R</sup>",
-          input$expression_tissue,
+          expression_tissue,
           gene()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -299,10 +311,11 @@ server <- function(input, output, session) {
   output$mutant_gene_expression_legend <- renderUI({
     gene <- em(gene())
     mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
+    expression_tissue <- isolate(input$expression_tissue)
     tagList(
       HTML(glue("
       This UMAP displays the normalized and scaled gene expression values for
-      {gene} in {mouse_gene} mouse {input$expression_tissue} tissue cells. A
+      {gene} in {mouse_gene} mouse {expression_tissue} tissue cells. A
       brighter color indicates a higher expression level.
       ")),
       downloadLink(
@@ -317,10 +330,11 @@ server <- function(input, output, session) {
       "plot.png"
     },
     content = function(file) {
+      expression_tissue <- isolate(input$expression_tissue)
       image_file <- gene_expression_plot_image(
         paste0(input_file_base(), "_mutant_gene.rds"),
         "<i>Setbp1</i><sup>S858R</sup>",
-        input$expression_tissue,
+        expression_tissue,
         gene()
       )
       file.copy(image_file, file)
@@ -331,11 +345,13 @@ server <- function(input, output, session) {
   output$wildtype_splice_junction_plot <- renderImage(
     {
       splice_junction_selected <- splice_junction() != ""
+      expression_tissue <- isolate(input$expression_tissue)
       if (splice_junction_selected) {
+        input_file_base <- isolate(input_file_base())
         image_file <- splice_junction_plot_image(
-          paste0(input_file_base(), "_wildtype_sj.rds"),
+          paste0(input_file_base, "_wildtype_sj.rds"),
           "Wild-type",
-          input$expression_tissue,
+          expression_tissue,
           splice_junction()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -346,11 +362,12 @@ server <- function(input, output, session) {
   output$wildtype_splice_junction_legend <- renderUI({
     gene <- em(input$gene)
     splice_junction <- splice_junction()
+    expression_tissue <- isolate(input$expression_tissue)
     tagList(
       HTML(glue("
         This UMAP displays the splice junction usage (SJU) values for splice
         junction {splice_junction} from {gene} in wild-type mouse
-        {input$expression_tissue} tissue cells. A brighter color indicates a
+        {expression_tissue} tissue cells. A brighter color indicates a
         higher usage level.  Please note that our manuscript does not use SJU
         values per cell, and SJU is a single number calculated for an entire
         population of cells, such as patient variant cells of a specific cell
@@ -368,10 +385,11 @@ server <- function(input, output, session) {
       "plot.png"
     },
     content = function(file) {
+      expression_tissue <- isolate(input$expression_tissue)
       image_file <- splice_junction_plot_image(
         paste0(input_file_base(), "_wildtype_sj.rds"),
         "Wild-type",
-        input$expression_tissue,
+        expression_tissue,
         splice_junction()
       )
       file.copy(image_file, file)
@@ -382,11 +400,13 @@ server <- function(input, output, session) {
   output$mutant_splice_junction_plot <- renderImage(
     {
       splice_junction_selected <- splice_junction() != ""
+      expression_tissue <- isolate(input$expression_tissue)
       if (splice_junction_selected) {
+        input_file_base <- isolate(input_file_base())
         image_file <- splice_junction_plot_image(
-          paste0(input_file_base(), "_mutant_sj.rds"),
+          paste0(input_file_base, "_mutant_sj.rds"),
           "<i>Setbp1</i><sup>S858R</sup>",
-          input$expression_tissue,
+          expression_tissue,
           splice_junction()
         )
         list(src = image_file, width = "100%", height = "auto")
@@ -398,11 +418,12 @@ server <- function(input, output, session) {
     gene <- em(input$gene)
     splice_junction <- splice_junction()
     mouse_gene <- paste(em("Setbp1"), tags$sup("S858R"))
+    expression_tissue <- isolate(input$expression_tissue)
     tagList(
       HTML(glue("
         This UMAP displays the splice junction usage (SJU) values for splice
         junction {splice_junction} from {gene} in {mouse_gene} mouse
-        {input$expression_tissue} tissue cells. A brighter color indicates a
+        {expression_tissue} tissue cells. A brighter color indicates a
         higher usage level.  Please note that our manuscript does not use SJU
         values per cell, and SJU is a single number calculated for an entire
         population of cells, such as patient variant cells of a specific cell
@@ -420,10 +441,11 @@ server <- function(input, output, session) {
       "plot.png"
     },
     content = function(file) {
+      expression_tissue <- isolate(input$expression_tissue)
       image_file <- splice_junction_plot_image(
         paste0(input_file_base(), "_mutant_sj.rds"),
         "<i>Setbp1</i><sup>S858R</sup>",
-        input$expression_tissue,
+        expression_tissue,
         splice_junction()
       )
       file.copy(image_file, file)
