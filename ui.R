@@ -163,24 +163,28 @@ plots <- tabPanel(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput(
-              "wildtype_gene_expression_plot",
-              width = "100%",
-              height = "auto"
+            p(
+              plotOutput(
+                "wildtype_gene_expression_plot",
+                width = "100%",
+                height = "auto"
+              ),
+              uiOutput("wildtype_gene_expression_legend")
             )
-          ),
-          uiOutput("wildtype_gene_expression_legend")
+          )
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput(
-              "mutant_gene_expression_plot",
-              width = "100%",
-              height = "auto"
+            p(
+              plotOutput(
+                "mutant_gene_expression_plot",
+                width = "100%",
+                height = "auto"
+              ),
+              uiOutput("mutant_gene_expression_legend")
             )
-          ),
-          uiOutput("mutant_gene_expression_legend")
+          )
         )
       )
     )
@@ -191,24 +195,28 @@ plots <- tabPanel(
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput(
-              "wildtype_splice_junction_plot",
-              width = "100%",
-              height = "auto"
+            p(
+              plotOutput(
+                "wildtype_splice_junction_plot",
+                width = "100%",
+                height = "auto"
+              ),
+              uiOutput("wildtype_splice_junction_legend")
             )
-          ),
-          uiOutput("wildtype_splice_junction_legend")
+          )
         ),
         column(
           6,
           shinycssloaders::withSpinner(
-            plotOutput(
-              "mutant_splice_junction_plot",
-              width = "100%",
-              height = "auto"
+            p(
+              plotOutput(
+                "mutant_splice_junction_plot",
+                width = "100%",
+                height = "auto"
+              ),
+              uiOutput("mutant_splice_junction_legend")
             )
-          ),
-          uiOutput("mutant_splice_junction_legend")
+          )
         )
       )
     )
