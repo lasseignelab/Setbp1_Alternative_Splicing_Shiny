@@ -40,9 +40,9 @@ RUN apt-get install -y \
 
 #### Leave the top line the same for each new project. Uncomment lines to add ####
 RUN R -e 'install.packages(c("tidyverse", "remotes",  "BiocManager", "devtools", "knitr", "lintr", "styler", "here", "markdown", "rmarkdown"))' \
-&& R -e 'install.packages(c("ggplot2", "plyr", "Matrix", "shiny", "shinyjs", "shinycssloaders", "MARVEL"))' \
-&& R -e 'install.packages(c("ggtext", "gh", "viridislite", "fontawesome", "glue"))'
-#  && R -e 'devtools::install_github("YosefLab/VISION")' \
+&& R -e 'install.packages(c("ggplot2", "plyr", "Matrix", "shiny", "shinyjs", "shinycssloaders"))' \
+&& R -e 'install.packages(c("ggtext", "gh", "viridislite", "fontawesome", "glue"))' \
+&& R -e 'devtools::install_github("wenweixiong/MARVEL")'
 #  && R -e 'remotes::install_github("< insert GitHub repos here >")' \
 #  && R -e 'BiocManager::install(c("< insert Biconductor repos here >"))'
 
