@@ -95,8 +95,8 @@ server <- function(input, output, session) {
             with retained intron events. Arrows indicate the direction of
             transcription. (B) Split violin plots showing {selected_gene}
             expression per cell for all cell types, split by condition. (C)
-            Heatmaps of the changes in normalized mean SJ expression (top) and
-            usage (bottom) between {mouse_gene} mice and controls for all SJs of
+            Heatmaps of the changes in normalized mean SJ expression and
+            usage between {mouse_gene} mice and controls for all SJs of
             {selected_gene}. The top heatmap annotation indicates cell type. A
             positive delta indicates expression or usage was higher in
             {mouse_gene} mice than controls, and a negative indicates expression
