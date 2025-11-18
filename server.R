@@ -87,7 +87,7 @@ server <- function(input, output, session) {
         div(
           tags$img(src = url, width = "100%", height = "auto"),
           p(HTML(glue("
-            (A) Transcript of all annotated transcripts of {selected_gene}.
+            (A) Transcript models of all annotated transcripts of {selected_gene}.
             The color indicates transcript classification: indigo = transcripts
             flagged for nonsense-mediated decay (NMD), dark teal =
             protein-coding transcripts, turquoise = protein-coding transcripts,
