@@ -7,11 +7,12 @@
 #
 # @param data_file Name of the file to create the plot from.
 # @param data_name Name of the data to put in the plot title, i.e. Wildtype.
-# @param splice_junction Splice junction name of filter the data for the plot.
+# @param tissue Tissue name for the data to plot.
+# @param splice_junction Splice junction name to filter the data for the plot.
 # @return The name of the image file generated.
 ################################################################################
 
-splice_junction_plot_image <- function(data_file, data_name, splice_junction) {
+splice_junction_plot_image <- function(data_file, data_name, tissue, splice_junction) {
 
   gc()
   setbp1 <- readRDS(data_file)
@@ -25,9 +26,10 @@ splice_junction_plot_image <- function(data_file, data_name, splice_junction) {
   )
   setbp1 <- NULL
 
+  title_tissue <- toTitleCase(tissue)
   plot <- plot +
     labs(
-      title = glue("{data_name} SJU for {splice_junction}"),
+      title = glue("{data_name} {title_tissue} SJU for {splice_junction}"),
       color = "SJU\nper\nCell"
     ) +
     ggplot_theme()
